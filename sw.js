@@ -3,7 +3,7 @@
    策略：stale-while-revalidate — 先回快取（開得快、離線也開得起來），
    同時在背景抓新版寫回快取，下次開啟即為新版；有新版時由頁面提示重新載入。
    改版時務必同步 bump VERSION，否則舊快取不會被清掉。 */
-const VERSION = '1.1.0';
+const VERSION = '1.3.0';
 const CACHE = 'costa-serena-' + VERSION;
 const SHELL = [
   './',

@@ -62,17 +62,20 @@ Fac   = { id, zh, en, cat, loc, free, icon, desc, tips }
 
 改完資料的驗證方式：抽出 `<script>` 內容跑 `node --check`，再用 stub 過的 `document`/`localStorage` 呼叫三個 render 函式做 smoke test（無測試框架，手動跑即可）。
 
+**版面問題不要用讀 CSS 的方式猜**——本機有 Google Chrome，可以量：把一個 probe 頁面暫時放進 repo，用 iframe 載入 `index.html`，起 `python3 -m http.server`，跑 `Google\ Chrome --headless=new --virtual-time-budget=… --dump-dom` 把 `getBoundingClientRect()` 的結果印進 DOM 再抓回來。sticky 定位那個 bug 就是這樣量出來的。用完記得刪掉 probe 檔。
+
 ### 硬編碼、不由 `D` 衍生的內容
 
 改設施資料時**不會**自動連動，需手動同步：
 
 - 動線指南 modal（`id="navModal"`）
 - 餐飲速查 modal（`id="dineModal"`）
-- 船舶諸元 bar（`id="specsBar"`，與 README 表格重複）
-- 關於／免責 modal（`id="aboutModal"`，與 README 免責聲明段重複）
+- 關於／免責 modal（`id="aboutModal"`，含船舶規格與免責聲明，與 README 對應段落重複）
 - `costa_serena_deck_guide.md` — 同一份甲板資料的人類可讀版，與 `D` 各自獨立維護
 
 ### CSS
+
+**`overflow-x: hidden` 只能放在 `html`，不能放在 `body`。** 放在 `body` 會讓 body 變成捲動容器，`.deck-bar` 的 `position: sticky` 便改以 body 內容框為基準——頂端多出 52px 空白、往下遮住 41px 內容，且捲動時完全不會固定。已用 headless Chrome 量測確認（`stickyShift = 51px`）。
 
 **高度受限的 flex column 捲動區**（`.search-results`、`.modal-sheet-body`、`.desktop-sidebar-list`）的直接子元素必須 `flex-shrink: 0`。
 少了它，內容超出容器時子元素會被壓扁而非觸發捲動，再配上 `.fac-item { overflow: hidden }` 就會把卡片內容截斷。
@@ -93,6 +96,13 @@ Mobile-first，斷點以 320–428px 為 base。所有色彩與尺寸集中在 `
 
 `sw.js` 的 `VERSION` 必須**與 `APP_VERSION` 一起 bump**，否則舊快取不會被清掉，使用者永遠拿到舊資料。
 快取策略是 stale-while-revalidate：先回快取（離線也開得起來），背景抓新版；新版備妥時由頁面顯示 `#updateBar` 讓使用者決定何時重載。
+
+## 網址路由
+
+`#/`（速覽）、`#/deck/<id>`（單一 Deck）、`#/starred`（收藏）。`go()` 會呼叫 `syncHash()` 推一筆 history entry，`hashchange` 與 `popstate` 都導向 `applyRoute()`（同狀態時提早 return，重複觸發無害）。
+
+**`popstate` 的優先序是「先關覆蓋層、再回上一個畫面」**——改動這段時務必保持，否則返回鍵會跳過覆蓋層直接換頁。
+無效的 Deck 編號會退回速覽，不要假設 hash 一定合法。
 
 ## 覆蓋層與收藏的兩條規則
 

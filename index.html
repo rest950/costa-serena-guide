@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <title>Costa Serena 莎倫娜號｜設施導覽</title>
   <meta name="theme-color" content="#07111e">
+  <meta name="description" content="歌詩達郵輪莎倫娜號 (Costa Serena) 14 個 Deck 的設施、餐廳、泳池與防迷路動線導覽。可離線使用，資料依 Costa 官方甲板圖整理（非官方專案）。">
+  <link rel="canonical" href="https://rest950.github.io/costa-serena-guide/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Costa Serena 莎倫娜號設施導覽">
+  <meta property="og:title" content="Costa Serena 莎倫娜號｜設施導覽">
+  <meta property="og:description" content="歌詩達郵輪莎倫娜號 (Costa Serena) 14 個 Deck 的設施、餐廳、泳池與防迷路動線導覽。可離線使用，資料依 Costa 官方甲板圖整理（非官方專案）。">
+  <meta property="og:url" content="https://rest950.github.io/costa-serena-guide/">
+  <meta property="og:image" content="https://rest950.github.io/costa-serena-guide/icons/icon-512.png">
+  <meta property="og:locale" content="zh_TW">
+  <meta name="twitter:card" content="summary">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -47,8 +57,12 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+    /* overflow-x 只放在 html。放在 body 會讓 body 變成捲動容器，
+       .deck-bar 的 sticky 就會改以 body 內容框為基準：在頂端多出 52px 空白，
+       且往下遮住 41px 的內容，捲動時也不會固定在 header 下方。 */
+    html { overflow-x: hidden; }
     html, body {
-      width: 100%; max-width: 100vw; overflow-x: hidden;
+      width: 100%; max-width: 100vw;
       background: var(--bg); color: var(--text);
       font-family: var(--font); font-size: 15px; line-height: 1.55;
       min-height: 100vh; min-height: 100dvh;
@@ -98,18 +112,14 @@
     a.hdr-btn { text-decoration: none; }
 
     /* ── Specs banner (collapsible) ── */
-    .specs-bar {
-      background: var(--bg-surface); border-bottom: 1px solid var(--border);
-      overflow: hidden; transition: max-height 0.3s ease;
-      max-height: 0;
+    /* 關於 modal 內的船舶規格 */
+    .about-specs {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px 10px; margin-top: 2px;
     }
-    .specs-bar.open { max-height: 42px; }
-    .specs-scroll {
-      display: flex; gap: 14px; padding: 8px 12px;
-      overflow-x: auto; white-space: nowrap; font-size: 0.72rem; color: var(--text-sec);
-      -webkit-overflow-scrolling: touch;
-    }
-    .specs-scroll strong { color: var(--gold-light); }
+    .about-specs div { display: flex; justify-content: space-between; gap: 8px; }
+    .about-specs dt { color: var(--text-dim); font-size: 0.76rem; }
+    .about-specs dd { color: var(--gold-light); font-size: 0.78rem; font-weight: 600; }
 
     /* ── Deck selector sticky bar ── */
     .deck-bar {
@@ -292,6 +302,10 @@
     .ov-pill.t-paid { border-left: 2px solid var(--amber); }
     .ov-pill.t-pool { border-left: 2px solid var(--cyan); }
     .ov-pill.t-ent { border-left: 2px solid var(--purple); }
+    .ov-pill.t-more {
+      border-style: dashed; border-color: var(--border-active);
+      color: var(--gold-light); cursor: pointer; touch-action: manipulation;
+    }
     .ov-chevron {
       width: 28px; height: 28px; display: grid; place-items: center;
       color: var(--text-dim); font-size: 0.8rem; transition: transform 0.25s;
@@ -320,11 +334,20 @@
     .search-input-wrap { flex: 1; position: relative; }
     .search-input {
       width: 100%; background: var(--bg-surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 10px 12px 10px 36px;
+      border-radius: 10px; padding: 10px 40px 10px 36px;
       color: var(--text); font-size: 16px; font-family: inherit;
       outline: none; -webkit-appearance: none;
     }
     .search-input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(212,175,55,0.2); }
+    .search-clear {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      width: 26px; height: 26px; border-radius: 50%; border: none;
+      background: rgba(255,255,255,0.10); color: var(--text-sec);
+      font-size: 0.75rem; display: none; place-items: center;
+      cursor: pointer; touch-action: manipulation;
+    }
+    .search-clear.show { display: grid; }
+    .search-clear:active { background: rgba(255,255,255,0.18); }
     .search-input-icon {
       position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
       font-size: 0.9rem; color: var(--text-dim); pointer-events: none;
@@ -583,7 +606,6 @@
     </div>
     <div class="hdr-actions">
       <button class="hdr-btn nav-search-btn" onclick="openSearch()" title="搜尋">🔍</button>
-      <button class="hdr-btn" onclick="toggleSpecs()" title="船舶資訊">📋</button>
     </div>
     <!-- Desktop inline nav buttons -->
     <div class="desktop-nav-btns">
@@ -598,18 +620,6 @@
     </div>
   </div>
 </header>
-
-<!-- Specs bar (collapsed by default) -->
-<div class="specs-bar" id="specsBar">
-  <div class="specs-scroll">
-    <span>⚖️ <strong>114,500 GT</strong></span>
-    <span>📏 <strong>290m</strong></span>
-    <span>👥 <strong>3,780人</strong></span>
-    <span>🛏️ <strong>1,504間</strong></span>
-    <span>🚢 <strong>13 個客用 Deck</strong></span>
-    <span>⚡ <strong>21.5節</strong></span>
-  </div>
-</div>
 
 <!-- Deck bar (shown in single-deck mode) -->
 <nav class="deck-bar" id="deckBar">
@@ -659,7 +669,6 @@
   <button class="more-item" onclick="openSearch(); closeMore();">🔍 搜尋設施</button>
   <button class="more-item" onclick="openModal('dineModal'); closeMore();">🍽️ 餐飲速查表</button>
   <button class="more-item" onclick="openModal('navModal'); closeMore();">🧭 防迷路指南</button>
-  <button class="more-item" onclick="toggleSpecs(); closeMore();">📋 船舶基本資料</button>
   <a class="more-item" href="https://www.cruisemapper.com/?imo=9343132" target="_blank" rel="noopener noreferrer" onclick="closeMore()">🛰️ 航線即時追蹤<span class="ext">↗</span></a>
   <a class="more-item" href="https://www.windy.com/" target="_blank" rel="noopener noreferrer" onclick="closeMore()">🌬️ 風場海況<span class="ext">↗</span></a>
   <button class="more-item" onclick="openModal('aboutModal'); closeMore();">ℹ️ 關於與免責聲明</button>
@@ -670,7 +679,8 @@
   <div class="search-top">
     <div class="search-input-wrap">
       <span class="search-input-icon">🔍</span>
-      <input type="text" class="search-input" id="searchInput" placeholder="搜尋設施、餐廳、泳池、劇院..." oninput="doSearch()">
+      <input type="text" class="search-input" id="searchInput" placeholder="搜尋設施、餐廳、泳池、劇院..." oninput="doSearch();syncClear()">
+      <button class="search-clear" id="searchClear" onclick="clearSearch()" title="清除">✕</button>
     </div>
     <button class="search-cancel" onclick="closeSearch()">取消</button>
   </div>
@@ -799,6 +809,17 @@
   </div>
   <div class="modal-sheet-body">
     <div class="tip-card">
+      <h4>🚢 船舶規格</h4>
+      <dl class="about-specs">
+        <div><dt>總噸位</dt><dd>114,500 GT</dd></div>
+        <div><dt>船身長度</dt><dd>290 公尺</dd></div>
+        <div><dt>最大載客</dt><dd>3,780 人</dd></div>
+        <div><dt>客艙數</dt><dd>1,504 間</dd></div>
+        <div><dt>客用 Deck</dt><dd>13 個（另有 Deck 0）</dd></div>
+        <div><dt>巡航速度</dt><dd>21.5 節</dd></div>
+      </dl>
+    </div>
+    <div class="tip-card">
       <h4>⚠️ 非官方專案</h4>
       <p>本站為旅客個人整理的開源專案，<strong>並非歌詩達郵輪 (Costa Crociere S.p.A.) 官方網站</strong>，亦未受其贊助或審核。</p>
     </div>
@@ -828,7 +849,7 @@
 const D=[{id:14,num:"14",zh:"船帆座",it:"Vela",icon:"⛵",gold:false,desc:"全船制高點露天甲板：頂層日光浴場與巨型水上滑道",nature:"頂層日光浴與滑水道",tags:["頂層全景","滑水道","日光浴"],fac:[{id:"f14_1",zh:"頂層日光浴場",en:"Solarium",cat:"pool",loc:"全層",free:true,icon:"☀️",desc:"全船最高的露天日光浴甲板，360 度無遮蔽海景，是看日出、日落與進出港的最佳位置。",tips:"躺椅先到先得；海風強時請注意保暖。"},{id:"f14_2",zh:"Toboga 水上滑道",en:"Toboga Waterslide",cat:"pool",loc:"船尾",free:true,icon:"🌊",desc:"由頂層出發的旋轉滑水道，一路俯衝直降至 Deck 11 的 Lido Iris 泳池。",tips:"開放時間視風速與海象調整；請依救生員指示排隊入場。"}]},{id:12,num:"12",zh:"飛馬座",it:"Pegasus",icon:"🐎",gold:false,desc:"水療上層、露天環形慢跑道與綜合運動場",nature:"運動甲板與水療上層",tags:["慢跑道","綜合運動場","水療上層","日落酒吧"],fac:[{id:"f12_1",zh:"Solemio 水療中心 (上層)",en:"Beauty Spa Solemio",cat:"spa",loc:"船頭",free:false,icon:"♨️",desc:"雙層水療中心的上層，設有熱療區、桑拿、土耳其浴、海水熱療池與療程包廂。",tips:"療程與水療通票均需付費；登船日常有早鳥優惠，建議提早預約。"},{id:"f12_2",zh:"海水熱療池",en:"Thalassotherapy Pool",cat:"spa",loc:"船頭 (Solemio Spa 內)",free:false,icon:"♨️",desc:"Solemio Spa 內的加溫海水熱療池，搭配桑拿與土耳其浴使用。",tips:"需付費（水療通票或單次療程）；Spa 橫跨 Deck 11–12，入口以現場指示為準。"},{id:"f12_3",zh:"綜合運動場",en:"Sport Area",cat:"entertainment",loc:"船尾",free:true,icon:"🏀",desc:"四周圍網的戶外多功能球場，可打籃球、排球與五人制足球。",tips:"娛樂團隊定期舉辦全船運動友誼賽，可現場報名。"},{id:"f12_4",zh:"露天環形慢跑道",en:"Outdoor Jogging Track",cat:"spa",loc:"船中",free:true,icon:"👟",desc:"環繞船身的防滑露天跑道，清晨可迎著海平面晨跑健走。",tips:"請依跑道標示方向順向慢跑；尖峰時段留意散步旅客。"},{id:"f12_5",zh:"日落酒吧",en:"Sunset Bar",cat:"bar",loc:"船尾",free:true,icon:"🍹",desc:"運動場旁的露天酒吧，適合運動後或黃昏時分小酌。",tips:"入場免費；酒水自費或使用船上飲料套餐。"}]},{id:11,num:"11",zh:"處女座",it:"Virgo",icon:"💃",gold:false,desc:"水療美容中心、健身房、Lido Iris 泳池與 Élite 專屬餐廳",nature:"水療健身層與 Élite 套房區",tags:["健身中心","Solemio 水療","Lido Iris","Élite 專屬餐廳","戶外親子區"],fac:[{id:"f11_1",zh:"全景健身中心",en:"Area Gym",cat:"spa",loc:"船頭",free:true,icon:"🏃",desc:"面海的健身房，配備心肺器材、重訓器械與團體課教室。",tips:"免費使用；請著運動服與室內運動鞋，私人教練課需付費預約。"},{id:"f11_2",zh:"Solemio 水療美容中心",en:"Beauty Spa Solemio",cat:"spa",loc:"船頭",free:false,icon:"💆",desc:"水療中心主層，提供精油按摩、臉部保養、美髮造型、美甲與男士修容。",tips:"全項目付費；熱門時段建議登船當日就預約。"},{id:"f11_3",zh:"Lido Iris 彩虹泳池",en:"Lido Iris",cat:"pool",loc:"船尾",free:true,icon:"🏊",desc:"露天泳池，同時是 Deck 14 Toboga 滑水道的著陸緩衝池。",tips:"晴天開放；池畔常有 DJ 與熱舞教學。"},{id:"f11_4",zh:"露天日光浴場",en:"Solarium",cat:"pool",loc:"船中",free:true,icon:"🪑",desc:"泳池旁的躺椅日光浴區。",tips:"躺椅先到先得。"},{id:"f11_5",zh:"Élite 套房與 Club 專屬餐廳",en:"Élite Suite & Club Restaurant",cat:"dining",loc:"船頭",free:false,icon:"⭐",desc:"提供給 Élite 套房與 Club 艙賓客的獨立餐廳，菜單與服務規格高於主餐廳。",tips:"限特定艙等賓客使用；其他艙等如可加購請洽總服務台。"},{id:"f11_6",zh:"戶外親子活動區",en:"Outdoor Squok Family Area",cat:"kids",loc:"船尾",free:true,icon:"🧸",desc:"戶外親子遊戲與戲水區，配安全地墊與遮陽設施。",tips:"幼童需由家長全程陪同。"},{id:"f11_7",zh:"Élite 頂級套房客艙",en:"Élite Suites",cat:"cabin",loc:"船頭",free:false,icon:"👑",desc:"本 Deck 僅十餘間頂級套房，可就近使用水療區與 Élite 專屬餐廳。",tips:"套房賓客享優先登離船等禮遇。"}]},{id:10,num:"10",zh:"金牛座",it:"Taurus",icon:"🐂",gold:false,desc:"自助餐廳上層、思高兒童俱樂部與泳池上層日光浴場",nature:"親子天地與自助餐上層",tags:["思高兒童俱樂部","幼兒專區","自助餐上層","日光浴場"],fac:[{id:"f10_1",zh:"自助餐廳 (上層用餐區)",en:"Restaurant Buffet (Upper)",cat:"dining",loc:"船尾",free:true,icon:"🍽️",desc:"自助餐廳的挑高上層雅座，海景開闊、用餐氛圍較安靜。",tips:"Deck 9 客滿時可端餐點上 Deck 10，通常較容易找到靠窗位。"},{id:"f10_2",zh:"思高兒童俱樂部",en:"Squok Club",cat:"kids",loc:"船中偏後",free:true,icon:"👶",desc:"官方兒童俱樂部，分 Mini（3–6 歲）與 Maxi（7–11 歲）兩組，由輔導員帶領活動。",tips:"免費登記參加；3 歲以上且已戒尿布即可。"},{id:"f10_3",zh:"幼兒專屬遊戲區",en:"Squok Baby Area",cat:"kids",loc:"船尾",free:true,icon:"🧸",desc:"為學齡前幼童設計的室內遊戲區。",tips:"需家長全程陪同。"},{id:"f10_4",zh:"太陽泳池上層看台",en:"Lido Sole (Upper)",cat:"pool",loc:"船中",free:true,icon:"🪑",desc:"俯瞰 Deck 9 太陽泳池的挑高看台，可同時觀賞 LED 大螢幕。",tips:"觀賞池畔派對與演出的最佳位置。"},{id:"f10_5",zh:"露天日光浴場",en:"Solarium",cat:"pool",loc:"船中",free:true,icon:"☀️",desc:"環池的露天躺椅日光浴區。",tips:"躺椅先到先得。"},{id:"f10_6",zh:"中高層甲板客艙區",en:"Staterooms",cat:"cabin",loc:"船頭",free:false,icon:"🛏️",desc:"本 Deck 船頭側設有客艙，緊鄰泳池與自助餐廳。",tips:"距離餐飲與泳池極近，但派對時段可能較吵。"}]},{id:9,num:"9",zh:"天秤座",it:"Libra",icon:"⚖️",gold:true,desc:"伸縮穹頂泳池、自助餐廳、海上撈火鍋與池畔小吃站（全通甲板）",nature:"黃金貫通層 · 泳池與百匯中心",tags:["黃金全通甲板","Lido Sole","Lido Urano","自助餐廳","海上撈火鍋","池畔小吃站"],fac:[{id:"f9_1",zh:"Lido Sole 太陽泳池",en:"Lido Sole",cat:"pool",loc:"船中",free:true,icon:"🏊",desc:"全船主要休閒中樞，配自動伸縮玻璃穹頂、恆溫泳池、按摩池與巨型 LED 大螢幕。",tips:"晴天開頂、陰雨閉合，全天候可用；夜間常播放露天電影。"},{id:"f9_2",zh:"太陽酒吧",en:"Sole Bar",cat:"bar",loc:"船中",free:true,icon:"🍸",desc:"太陽泳池畔的主要酒吧。",tips:"入場免費；飲品自費或使用飲料套餐。"},{id:"f9_3",zh:"太陽露台",en:"Sole Balcony",cat:"bar",loc:"船中",free:true,icon:"🥂",desc:"太陽泳池旁的挑高露台座位區。",tips:"適合避開池畔人潮的安靜角落。"},{id:"f9_4",zh:"Lido Urano 天王星泳池",en:"Lido Urano",cat:"pool",loc:"船尾",free:true,icon:"🌊",desc:"船尾的第二座恆溫泳池，附設按摩浴缸，氛圍較寧靜。",tips:"靠近自助餐廳；適合靜心游泳或閱讀。"},{id:"f9_5",zh:"天王星酒吧",en:"Lido Urano Bar",cat:"bar",loc:"船尾",free:true,icon:"🍹",desc:"天王星泳池畔的休閒酒吧。",tips:"入場免費；飲品自費。"},{id:"f9_6",zh:"自助餐廳 (主層)",en:"Restaurant Buffet",cat:"dining",loc:"船尾",free:true,icon:"🥗",desc:"全船最大的免費自助百匯，供應早、午、下午茶、晚餐與深夜點心。",tips:"免費自由取用；船尾設有大片觀景落地窗。"},{id:"f9_7",zh:"海上撈火鍋",en:"Hot Pot Restaurant",cat:"dining",loc:"船尾 (自助餐區旁)",free:false,icon:"🍲",desc:"亞洲航線限定的付費火鍋餐廳，供應海鮮拼盤、品牌肉品與十種以上蔬菜，搭配 12 種自助蘸料。",tips:"需付費並建議提前預約；座位有限，建議登船首日就訂位。"},{id:"f9_8",zh:"海灘風味小吃站",en:"The Salty Beach Street Food",cat:"dining",loc:"船中 (泳池畔)",free:false,icon:"🍔",desc:"泳池畔的付費快餐吧，供應美式漢堡、熱狗與現炸薯條等街頭小食。",tips:"需付費單點，非自助餐免費項目；供餐時段以每日船上日誌為準。"},{id:"f9_9",zh:"泳池層客艙區",en:"Staterooms",cat:"cabin",loc:"船頭",free:false,icon:"🛏️",desc:"本 Deck 船頭側設有客艙。",tips:"上樓即泳池與餐飲；清晨躺椅搬動聲可能較明顯。"}]},{id:8,num:"8",zh:"英仙座",it:"Perseus",icon:"⚔️",gold:false,desc:"全層客艙與船長艦橋 (Bridge)",nature:"客房層與艦橋管制區",tags:["陽台客艙","高級套房","艦橋"],fac:[{id:"f8_1",zh:"陽台房與套房客艙區",en:"Balcony Staterooms & Suites",cat:"cabin",loc:"全層",free:false,icon:"🛏️",desc:"擁有私人海景陽台的高級客艙集中層。",tips:"距 Deck 9 泳池與餐廳僅一層甲板，上下極為便利。"},{id:"f8_2",zh:"艦橋 / 船長駕駛台",en:"Ship's Bridge",cat:"service",loc:"船頭 (非公開管制區)",free:false,icon:"⚓",desc:"郵輪指揮中心，由船長與航海團隊 24 小時值守。",tips:"非公開區域；部分航次有付費幕後導覽可報名。"}]},{id:7,num:"7",zh:"水瓶座",it:"Aquarius",icon:"🏺",gold:false,desc:"全層客艙住宿層（豪華套房與陽台房集中區）",nature:"高級客房住宿層",tags:["豪華套房","陽台房","內艙房"],fac:[{id:"f7_1",zh:"豪華套房與全景套房",en:"Grand Suites & Panorama Suites",cat:"cabin",loc:"全層",free:false,icon:"👑",desc:"配備大型私人陽台與獨立起居空間的高級套房。",tips:"套房賓客享優先登離船等禮遇。"},{id:"f7_2",zh:"陽台房與內艙房",en:"Balcony & Inside Staterooms",cat:"cabin",loc:"全層",free:false,icon:"🛏️",desc:"遠離公共娛樂區、環境安靜的中高層甲板客房。",tips:"中央觀光電梯可直達 Deck 3 大廳與 Deck 9 泳池。"}]},{id:6,num:"6",zh:"半人馬座",it:"Centaurus",icon:"🏹",gold:false,desc:"全層純客艙住宿層，房型多樣",nature:"客房層（下一層即 Deck 5 娛樂區）",tags:["陽台房","海景房","內艙房","家庭連通房"],fac:[{id:"f6_1",zh:"綜合客房住宿區",en:"Staterooms & Suites",cat:"cabin",loc:"全層",free:false,icon:"🛏️",desc:"含陽台房、海景外艙房、標準內艙房與家庭連通房。",tips:"下一層即 Deck 5 娛樂與免稅街，適合喜愛夜生活的旅客。"}]},{id:5,num:"5",zh:"雙子座",it:"Gemini",icon:"♊",gold:true,desc:"娛樂、免稅購物、賭場、酒吧與壽司／披薩餐廳（全通甲板）",nature:"黃金貫通層 · 娛樂購物與夜生活中心",tags:["黃金全通甲板","劇院頂層","賭場","阿波羅大酒吧","免稅精品街","壽司吧","手工披薩"],fac:[{id:"f5_1",zh:"宙斯大劇院 (頂層座席)",en:"Theatre (Level 3)",cat:"entertainment",loc:"船頭",free:true,icon:"🎭",desc:"橫跨三層甲板的大劇院最高觀眾席，居高臨下俯瞰整個舞台。",tips:"免費自由入座；建議提早 15 分鐘進場搶中間席位。"},{id:"f5_2",zh:"萬神殿中庭 (上層)",en:"Pantheon Atrium",cat:"entertainment",loc:"船中",free:true,icon:"🏛️",desc:"挑高中庭的上層迴廊，可俯瞰大廳與觀光電梯。",tips:"拍照打卡的最佳角度之一。"},{id:"f5_3",zh:"阿波羅大酒吧",en:"Apollo Grand Bar",cat:"bar",loc:"船中",free:true,icon:"🎷",desc:"全船核心的大型社交交誼廳，設有樂隊舞台、木質舞池與吧檯。",tips:"入場免費；全天舉辦賓果、舞蹈教學與互動遊戲，飲品自費。"},{id:"f5_4",zh:"潘神迪斯可舞廳 (上層)",en:"Disco",cat:"entertainment",loc:"船尾",free:true,icon:"🪩",desc:"雙層挑高夜店的上層，配專業音響燈光與駐場 DJ。",tips:"免費入場（酒水付費）；未成年人有宵禁限制。"},{id:"f5_5",zh:"月神沙龍",en:"Luna Lounge",cat:"entertainment",loc:"船尾",free:true,icon:"🌙",desc:"船尾的大型多功能沙龍，設有舞台、舞池與酒吧。",tips:"主題之夜、化妝舞會與趣味競賽的主要場地。"},{id:"f5_6",zh:"雅努斯賭場",en:"Casino",cat:"entertainment",loc:"船中",free:false,icon:"🎰",desc:"古羅馬主題娛樂場，配吃角子老虎機、輪盤、21 點與百家樂賭桌。",tips:"僅於公海航行期間開放；未成年人禁止進入，禁止拍照。"},{id:"f5_7",zh:"電玩遊戲室",en:"Arcade Games Room",cat:"kids",loc:"船中",free:false,icon:"🕹️",desc:"街機賽車模擬器、體感遊戲與夾娃娃機。",tips:"使用房卡感應扣款購幣。"},{id:"f5_8",zh:"莎倫娜免稅精品街",en:"Galleria Shops",cat:"shopping",loc:"船中",free:true,icon:"🛍️",desc:"名錶、珠寶、化妝保養品、免稅煙酒與歌詩達官方紀念品。",tips:"公海航行期間免稅營業；航程中常有限時折扣。"},{id:"f5_9",zh:"葡萄酒吧",en:"Wine Bar",cat:"bar",loc:"船中",free:true,icon:"🍷",desc:"以葡萄酒為主的品飲吧，提供單杯與整瓶選擇。",tips:"入場免費；酒水自費，可請侍酒師推薦搭配。"},{id:"f5_10",zh:"邱比特鋼琴酒吧",en:"Cupido Piano Bar",cat:"bar",loc:"船尾",free:true,icon:"🎹",desc:"以愛心與邱比特為主題的典雅酒吧與舞池，設現場鋼琴演奏，晚間為慢舞與卡拉 OK 場地。",tips:"入場免費；酒水自費。"},{id:"f5_11",zh:"阿瑪利歐冰淇淋吧",en:"Gelateria Amarillo",cat:"dining",loc:"船中",free:false,icon:"🍦",desc:"義式手工冰淇淋 (Gelato)、可麗餅、甜點與義式濃縮咖啡。",tips:"自費單點；下午與宵夜時段最熱門。"},{id:"f5_12",zh:"海上壽司小酒館",en:"Sushino at Costa",cat:"dining",loc:"船中",free:false,icon:"🍣",desc:"正統日式手作料理，供應新鮮刺身、炙燒握壽司、卷物與日式清酒。",tips:"自費單點或套餐；可內用或外帶回房。"},{id:"f5_13",zh:"Pummid'Oro 義式手工披薩坊",en:"Pummid'Oro Pizzeria",cat:"dining",loc:"船中",free:false,icon:"🍕",desc:"義大利純手工現擀現烤披薩，天然酵母麵團與莫札瑞拉起司。",tips:"單點付費；晚間至深夜宵夜時段熱門首選。"},{id:"f5_14",zh:"岸上行程櫃台",en:"My Tours",cat:"service",loc:"船中",free:true,icon:"🗺️",desc:"各停靠港岸上觀光行程的解說、諮詢與報名。",tips:"熱門港口名額有限，建議登船首日就預訂。"},{id:"f5_15",zh:"網際網路中心",en:"Internet Point",cat:"service",loc:"船中",free:false,icon:"💻",desc:"提供上網終端與船上 Wi-Fi 方案購買。",tips:"需付費購買衛星 Wi-Fi 方案登入使用。"},{id:"f5_16",zh:"信用卡登錄機",en:"Credit Card Registration",cat:"service",loc:"船中",free:true,icon:"💳",desc:"自助綁定信用卡以完成船上帳戶結算設定。",tips:"離船日尖峰前先綁定，可省下總服務台排隊時間。"}]},{id:4,num:"4",zh:"獵戶座",it:"Orion",icon:"🏹",gold:false,desc:"主餐廳上層、劇院中層、迪斯可舞廳、圖書館與禮拜堂",nature:"主餐廳上層與劇院中層",tags:["劇院中層","迪斯可舞廳","圖書館","禮拜堂","照片藝廊"],fac:[{id:"f4_1",zh:"宙斯大劇院 (中層座席)",en:"Theatre (Level 2)",cat:"entertainment",loc:"船頭",free:true,icon:"🎭",desc:"劇院中層看台，視野開闊平視舞台。",tips:"免費自由入座；開演前 10 分鐘入場為佳。"},{id:"f4_2",zh:"萬神殿中庭 (中層)",en:"Pantheon Atrium",cat:"entertainment",loc:"船中",free:true,icon:"🏛️",desc:"中庭的中層迴廊，連接船頭與船尾動線。",tips:"與 Deck 3、Deck 5 中庭相通。"},{id:"f4_3",zh:"瑟瑞斯主餐廳 (上層)",en:"Ceres Restaurant (Upper)",cat:"dining",loc:"船尾",free:true,icon:"🍽️",desc:"瑟瑞斯主餐廳的上層挑高用餐區，供應免費點餐式正餐。",tips:"依房卡指定桌號與梯次入場；請勿穿拖鞋背心進入。"},{id:"f4_4",zh:"維斯塔主餐廳 (上層)",en:"Vesta Restaurant (Upper)",cat:"dining",loc:"船中偏後",free:true,icon:"🍷",desc:"維斯塔主餐廳的上層用餐區，菜單與 Ceres 相同。",tips:"免費提供；為船上兩大主餐廳之一。"},{id:"f4_5",zh:"潘神迪斯可舞廳 (下層)",en:"Disco",cat:"entertainment",loc:"船尾",free:true,icon:"🪩",desc:"雙層夜店的下層，設有吧檯與舞池。",tips:"免費入場（酒水付費）。"},{id:"f4_6",zh:"圖書館",en:"Library",cat:"service",loc:"船中",free:true,icon:"📚",desc:"安靜的閱讀空間，藏有各國語言書籍與雜誌。",tips:"請保持輕聲細語。"},{id:"f4_7",zh:"海上禮拜堂",en:"Chapel",cat:"service",loc:"船中",free:true,icon:"⛪",desc:"小型海上教堂，提供彌撒、祈禱與靜心空間。",tips:"全天開放；請保持肅靜與尊重。"},{id:"f4_8",zh:"會議室",en:"Meeting Room",cat:"service",loc:"船中",free:true,icon:"📋",desc:"多功能會議與講座空間。",tips:"使用需向總服務台洽詢。"},{id:"f4_9",zh:"國際旅客服務點",en:"International Hostess Info Point",cat:"service",loc:"船中",free:true,icon:"🛎️",desc:"多語旅客諮詢櫃台，協助處理語言與行程問題。",tips:"服務時段以每日船上日誌為準。"},{id:"f4_10",zh:"照片藝廊",en:"My Moments Photo Store",cat:"shopping",loc:"船中",free:true,icon:"📸",desc:"隨船攝影師的紀念照展示與沖印購買區。",tips:"可用數位機台以人臉辨識快速找到自己的照片。"}]},{id:3,num:"3",zh:"白羊座",it:"Aries",icon:"♈",gold:false,desc:"萬神殿迎賓大廳、總服務台、兩間主餐廳與兩間付費特色餐廳",nature:"迎賓大廳、總服務台與主餐飲層",tags:["萬神殿大廳","總服務台","Ceres 主餐廳","Archipelago","佛羅倫斯牛排館"],fac:[{id:"f3_1",zh:"萬神殿大廳 & 觀光電梯",en:"Pantheon Atrium",cat:"entertainment",loc:"船中",free:true,icon:"🏛️",desc:"貫穿 10 層甲板的氣派中庭，配 3 部透明玻璃觀光電梯與現場演奏舞台。",tips:"登船第一眼的震撼場景；拍照打卡必訪。"},{id:"f3_2",zh:"遊客服務中心 / 總服務台",en:"Reception",cat:"service",loc:"船中 (大廳旁)",free:true,icon:"🛎️",desc:"24 小時多語諮詢、帳單結算、房卡補發與疑難排解。",tips:"離船日尖峰建議提早使用自助機台或 App 結帳。"},{id:"f3_3",zh:"宙斯大劇院 (主層舞台)",en:"Theatre (Main Floor)",cat:"entertainment",loc:"船頭",free:true,icon:"🎭",desc:"大劇院前排搖滾區，近距離欣賞歌舞、特技與魔術演出。",tips:"免費觀賞；演出中請勿使用閃光燈。"},{id:"f3_4",zh:"瑟瑞斯主餐廳 (主層)",en:"Ceres Restaurant",cat:"dining",loc:"船尾",free:true,icon:"🍽️",desc:"旗艦主餐廳，供應免費點餐式多道式正餐。",tips:"依房卡排定時間用餐；請遵守船長晚宴著裝建議。"},{id:"f3_5",zh:"維斯塔主餐廳 (主層)",en:"Vesta Restaurant",cat:"dining",loc:"船中偏後",free:true,icon:"🍷",desc:"另一間免費點餐主餐廳，提供精緻歐陸料理。",tips:"免費享用；餐點現點現做。"},{id:"f3_6",zh:"Archipelago 米其林主廚餐廳",en:"Archipelago",cat:"dining",loc:"船中",free:false,icon:"🌟",desc:"由三位米其林星級主廚設計菜單的付費 fine dining，提供多道式套餐與侍酒師搭配。",tips:"需提前預約；建議 Smart Casual 以上著裝。"},{id:"f3_7",zh:"佛羅倫斯牛排館",en:"La Fiorentina Steak House",cat:"dining",loc:"船中",free:false,icon:"🥩",desc:"義式炭烤牛排專門店，主打托斯卡尼式帶骨大牛排。",tips:"需預約付費；適合慶祝場合。"},{id:"f3_8",zh:"潘神酒吧",en:"Welcome Bar",cat:"bar",loc:"船中 (大廳旁)",free:true,icon:"🍸",desc:"萬神殿大廳旁的迎賓酒吧，常有現場弦樂演奏。",tips:"入場免費；飲品自費或使用飲料套餐。"},{id:"f3_9",zh:"C-Dream 未來航程諮詢櫃台",en:"C-Dream / Future Cruise Consultant",cat:"service",loc:"船中",free:true,icon:"🧭",desc:"免費的未來航程諮詢服務，由 Future Cruise Consultant 介紹新航線與最新優惠，可直接在船上預訂下一趟郵輪。",tips:"諮詢免費；船上預訂通常有專屬折扣與訂金優惠。"},{id:"f3_10",zh:"岸上行程櫃台",en:"My Tours",cat:"service",loc:"船中 (大廳旁)",free:true,icon:"🗺️",desc:"岸上觀光行程諮詢與報名，含中文導覽團與接駁預訂。",tips:"熱門港口名額有限，建議登船首日即刻預訂。"},{id:"f3_11",zh:"C|Club 會員服務點",en:"C|Club Point",cat:"service",loc:"船中",free:true,icon:"🎫",desc:"歌詩達 C|Club 會員積分查詢與專屬優惠辦理。",tips:"持會員卡可洽詢升等與航程優惠。"},{id:"f3_12",zh:"信用卡登錄機",en:"Credit Card Registration",cat:"service",loc:"船中",free:true,icon:"💳",desc:"自助綁定信用卡以完成船上帳戶結算設定。",tips:"登船日先綁定可省下離船前的排隊時間。"},{id:"f3_13",zh:"下層戶外步道甲板",en:"Lower Promenade Deck",cat:"service",loc:"兩側戶外",free:true,icon:"🌊",desc:"緊鄰海面的戶外散步走道，上方懸掛全船救生艇。",tips:"安全逃生演習集合站 (Muster Station) 多設於此層兩側。"}]},{id:2,num:"2",zh:"仙后座",it:"Cassiopea",icon:"👑",gold:false,desc:"全層客艙住宿層（標準內艙房與經典海景外艙房）",nature:"平穩靜音客房住宿層",tags:["純客艙區","海景房","內艙房","靜音平穩"],fac:[{id:"f2_1",zh:"經典海景外艙房",en:"Classic Oceanview Staterooms",cat:"cabin",loc:"全層外側",free:false,icon:"🪟",desc:"配備觀景圓窗或方窗，採光充沛、性價比高。",tips:"低層甲板在大風浪時晃動感最小。"},{id:"f2_2",zh:"標準舒適內艙房",en:"Standard Inside Staterooms",cat:"cabin",loc:"全層內側",free:false,icon:"🛏️",desc:"經濟實惠的住宿選擇，配獨立衛浴、電視與保險箱。",tips:"房內全黑無光，睡眠品質佳。"}]},{id:1,num:"1",zh:"仙女座",it:"Andromeda",icon:"🧚",gold:false,desc:"客艙住宿層與主要登離船通道",nature:"客房層與登離船閘口",tags:["客艙住宿","登離船閘口","低層甲板平穩"],fac:[{id:"f1_1",zh:"主要登離船閘口",en:"Gangway & Tender Boarding",cat:"service",loc:"船中 / 兩側",free:true,icon:"🚪",desc:"靠泊碼頭或接駁小艇時的主要出入境與上下船閘口。",tips:"上下船請隨身攜帶房卡 (Costa Card) 感應過卡；Deck 0、1、2 兩側均設有出入門。"},{id:"f1_2",zh:"底層客艙區",en:"Lower Staterooms",cat:"cabin",loc:"全層",free:false,icon:"🛏️",desc:"低層甲板的內艙與海景客房，吃水深、重心低。",tips:"受風浪影響最小，適合容易暈船的旅客與長輩。"}]},{id:0,num:"0",zh:"醫療甲板",it:"Deck 0",icon:"🏥",gold:false,desc:"隨船醫療中心所在的 Deck（位於 Deck 1 下方，非客艙層）",nature:"醫療中心與出入閘口",tags:["24H 醫療中心","非客艙層"],fac:[{id:"f0_1",zh:"隨船醫療中心",en:"Hospital",cat:"service",loc:"船中",free:false,icon:"🏥",desc:"由隨船醫師與護理師駐診，可處理常見急症、外傷與基本檢驗。",tips:"醫療為自費項目，建議備妥海外旅遊醫療險與收據；暈船藥可至總服務台索取。"},{id:"f0_2",zh:"登離船閘口",en:"Exit",cat:"service",loc:"兩側",free:true,icon:"🚪",desc:"位於 Deck 1 下方，兩側設有出入閘口，部分港口由此上下船。",tips:"實際使用閘口以當日廣播與船上日誌為準。"}]}];
 
 // ═══ Version ═══
-const APP_VERSION="1.1.0", DATA_DATE="2026-08-23";   // 改版時同步 bump sw.js 的 VERSION
+const APP_VERSION="1.3.0", DATA_DATE="2026-08-23";   // 改版時同步 bump sw.js 的 VERSION
 
 // ═══ Quick-filter presets（卡片與搜尋篩選共用同一份定義）═══
 const QF=[
@@ -847,7 +868,9 @@ const qfDecks=q=>D.filter(d=>d.fac.some(q.test)).map(d=>+d.num).sort((a,b)=>a-b)
 let mode = "overview", deckId = 9, filter = "all", stars = JSON.parse(localStorage.getItem("cs_stars")||"[]");
 
 // ═══ Init ═══
-document.addEventListener("DOMContentLoaded", () => { render(); updateBadge();
+document.addEventListener("DOMContentLoaded", () => {
+  const r0=routeFromHash(); mode=r0.mode; deckId=r0.deckId;
+  render(); updateBadge();
   document.getElementById("verLabel").textContent=`v${APP_VERSION}`;
   document.getElementById("verDetail").textContent=`版本 v${APP_VERSION}　·　資料更新 ${DATA_DATE}`;
   window.addEventListener("scroll", () => { document.getElementById("btnTop").classList.toggle("show", scrollY > 250); });
@@ -870,10 +893,33 @@ document.addEventListener("DOMContentLoaded", () => { render(); updateBadge();
 });
 
 // ═══ Navigation ═══
+// 網址狀態：#/deck/9、#/starred、#/ —— 重整後回到原處，也能把特定 Deck 傳給同行的人
+function hashFor(m,id){ return m==='single'?'#/deck/'+id : m==='starred'?'#/starred' : '#/'; }
+function routeFromHash(){
+  const h=(location.hash||'').replace(/^#\/?/,'');
+  const m=/^deck\/(\d+)$/.exec(h);
+  if(m && D.some(d=>d.id===+m[1])) return {mode:'single', deckId:+m[1]};
+  if(h==='starred') return {mode:'starred', deckId};
+  return {mode:'overview', deckId};
+}
+function applyRoute(){
+  const r=routeFromHash();
+  if(r.mode===mode && r.deckId===deckId) return;
+  mode=r.mode; deckId=r.deckId; render();
+}
+function syncHash(){
+  const want=hashFor(mode,deckId);
+  if(location.hash===want) return;
+  if(canHist) history.pushState({nav:1},'',want);
+  else location.hash=want;
+}
+window.addEventListener('hashchange',applyRoute);
+
 function go(m, id) {
   if(id!==undefined) deckId=id;
   mode=m; closeMore(); render();
   window.scrollTo({top:0,behavior:'smooth'});
+  syncHash();
 }
 function jumpDeck(id){ go("single",id); }
 
@@ -919,7 +965,7 @@ function renderOverview(){
     const pills=d.fac.slice(0,5).map(f=>{
       let c=f.free?'t-free':'t-paid'; if(f.cat==='pool')c='t-pool'; if(f.cat==='entertainment'||f.cat==='bar')c='t-ent';
       return `<span class="ov-pill ${c}">${f.icon} ${f.zh}</span>`;
-    }).join('');
+    }).join('')+(d.fac.length>5?`<span class="ov-pill t-more" onclick="event.stopPropagation();toggleOvDeck(${d.id})">＋${d.fac.length-5} 項</span>`:'');
     const innerCards=d.fac.map(f=>renderFacItem(f,d)).join('');
     return `<div class="ov-deck ${d.gold?'golden':''}" id="ovDeck${d.id}">
       <div class="ov-deck-head" onclick="toggleOvDeck(${d.id})">
@@ -1012,7 +1058,11 @@ function ovBack(){
   else { const c=ovClose; ovClose=null; c(); }
   return true;
 }
-window.addEventListener('popstate',()=>{ const c=ovClose; ovClose=null; if(c) c(); });
+window.addEventListener('popstate',()=>{
+  const c=ovClose; ovClose=null;
+  if(c){ c(); return; }      // 覆蓋層優先：返回鍵先關搜尋 / modal
+  applyRoute();              // 否則回到網址對應的畫面
+});
 document.addEventListener('keydown',e=>{
   if(e.key!=='Escape') return;
   const m=document.getElementById('moreMenu');
@@ -1029,10 +1079,18 @@ function closeSearch(){ if(!ovBack()) closeSearchNow(); }
 function closeSearchNow(){
   document.getElementById("searchOverlay").classList.remove("open");
   document.getElementById("searchInput").value='';
-  filter='all'; updateSearchChips();
+  filter='all'; updateSearchChips(); syncClear();
+}
+function syncClear(){
+  document.getElementById('searchClear').classList
+    .toggle('show', !!document.getElementById('searchInput').value);
+}
+function clearSearch(){
+  const i=document.getElementById('searchInput');
+  i.value=''; syncClear(); doSearch(); i.focus();
 }
 function qfOpen(key){
-  document.getElementById("searchInput").value='';
+  document.getElementById("searchInput").value=''; syncClear();
   openSearch(); setFilter('qf:'+key);
 }
 function setFilter(c){
@@ -1067,7 +1125,6 @@ function doSearch(){
 }
 
 // ═══ Specs toggle ═══
-function toggleSpecs(){ document.getElementById("specsBar").classList.toggle("open"); }
 
 // ═══ More menu ═══
 function toggleMore(){ document.getElementById("moreMenu").classList.toggle("open"); document.getElementById("tabMore").classList.toggle("on"); }
