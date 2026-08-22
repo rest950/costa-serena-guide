@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 專案性質
 
-Costa Serena 郵輪樓層設施導覽的**零相依性靜態站台**。無 package.json、無 build step、無測試、無 lint、無 CI。整站就是根目錄的 `index.html`（CSS + 資料 + JS 全內嵌），部署方式為 GitHub Pages 直接服務 main 分支根目錄（`d2a28af` 已移除 Surge CNAME）。
+Costa Serena 郵輪 Deck 設施導覽的**零相依性靜態站台 / PWA**。無 package.json、無 build step、無測試框架、無 lint、無 CI。
+
+主體是根目錄的 `index.html`（CSS + 資料 + JS 全內嵌），另有 `sw.js`、`manifest.webmanifest`、`icons/`（PWA 用）。部署為 GitHub Pages 直接服務 main 分支根目錄（`d2a28af` 已移除 Surge CNAME）。
 
 ## 開發指令
 
@@ -49,7 +51,7 @@ Fac   = { id, zh, en, cat, loc, free, icon, desc, tips }
 | mode | 函式 | 說明 |
 |---|---|---|
 | `overview` | `renderOverview` | 全船剖面，各層可摺疊；頂部 `qf-grid` 快捷卡由 `QF` 產生 |
-| `single` | `renderSingle` | 單層詳情，支援 swipe 換 Deck |
+| `single` | `renderSingle` | 單一 Deck 詳情，支援 swipe 換 Deck |
 
 **Deck bar 有兩個易踩的坑**：① 全域 touch swipe 掛在 `document` 上，必須排除水平捲動區與覆蓋層（`NO_SWIPE` 選擇器），否則在 chip 列上快滑會誤觸換 Deck；② `renderDeckBar` 不可每次 `innerHTML` 重建（會把 `scrollLeft` 歸零），只在 chip 數量不符時才重建，並靠 `centeredDeck` 守衛避免每次 render 都`scrollIntoView` 把使用者捲動位置拉回去。
 | `starred` | `renderStarred` | localStorage 收藏 |
@@ -85,9 +87,19 @@ Mobile-first，斷點以 320–428px 為 base。所有色彩與尺寸集中在 `
 
 `filter` 有三種值：`all`、單一 `cat`（來自 chip）、`qf:<key>`（來自快捷卡）。判定一律走 `matchFilter()`，不要直接比 `f.cat===filter`。套用 `qf:` 時 `updateSearchChips()` 會動態插入一顆可清除的主題 chip。
 
-## 版本號
+## 版本號與離線快取
 
 `APP_VERSION` / `DATA_DATE` 定義在 `<script>` 開頭，由 `DOMContentLoaded` 注入 footer 的 `#verLabel` 與關於 modal 的 `#verDetail`。**不要把版本字串寫死在 HTML**——改一處即可。資料校正後記得同步 `DATA_DATE`。
+
+`sw.js` 的 `VERSION` 必須**與 `APP_VERSION` 一起 bump**，否則舊快取不會被清掉，使用者永遠拿到舊資料。
+快取策略是 stale-while-revalidate：先回快取（離線也開得起來），背景抓新版；新版備妥時由頁面顯示 `#updateBar` 讓使用者決定何時重載。
+
+## 覆蓋層與收藏的兩條規則
+
+1. **覆蓋層一律走 `ovOpen()` / `ovBack()`**（搜尋 overlay、三個 modal）。它們負責 push/pop 一筆 history entry，讓手機返回鍵與 Esc 能關閉覆蓋層而不是離開網站。`file://` 下 `pushState` 會拋錯，`canHist` 偵測後退回直接關閉。新增覆蓋層時照這個模式接，不要自己 toggle class 了事。
+2. **`toggleStar()` 不呼叫 `render()`**（除非在 `starred` 模式）。它用 `.btn-star[data-fac="…"]` 就地更新所有同一設施的按鈕——整頁重繪會把使用者展開的卡片全部收合。
+
+另外：桌機（≥1024px）隱藏 `.bottom-nav`，`.deck-bar` 是單一 Deck 模式唯一的切換 UI，**不要再把它隱藏**。
 
 ## 內容規範
 

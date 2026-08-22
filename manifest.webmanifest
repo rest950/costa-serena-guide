@@ -1,0 +1,19 @@
+{
+  "name": "Costa Serena 莎倫娜號｜設施導覽",
+  "short_name": "莎倫娜號導覽",
+  "description": "歌詩達郵輪莎倫娜號 14 個 Deck 的設施、餐廳、泳池與防迷路導覽（非官方）",
+  "lang": "zh-TW",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#07111e",
+  "theme_color": "#07111e",
+  "categories": ["travel", "navigation", "reference"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -18,7 +18,8 @@
 
 ## ✨ 主要特色 (Features)
 
-* 📱 **Mobile-First 極致響應式設計**：針對 iPhone / Android 螢幕比例調校，不卡頓、不溢出、支援 PWA/加入主畫面全螢幕瀏覽。
+* 📱 **Mobile-First 極致響應式設計**：針對 iPhone / Android 螢幕比例調校，不卡頓、不溢出。
+* 🛟 **可離線使用 (PWA)**：內建 Service Worker，加入主畫面後即使**船上沒有網路或不想付費上網也能全功能開啟**；有新版資料時會提示更新。
 * 🏛️ **13 個客用 Deck 全收錄**：Deck 1 至 Deck 14（無 Deck 13，另收錄 Deck 0 醫療甲板）中英文名稱、設施位置、開放性質（免費/自費）完整收錄。
 * 👆 **手風琴摺疊卡片 (Accordion UI)**：預設精簡列表，點擊即時展開詳細說明與貼心提醒，閱讀流暢省時。
 * 🚢 **全 Deck 速覽矩陣 (Overview)**：垂直船身剖面結構，支援「依需求直達」（想游泳、吃大餐、看秀、做 Spa、帶小孩等）。
@@ -28,15 +29,19 @@
 * 🍽️ **全船餐飲速查**：免費包套餐廳與付費特色餐廳（Archipelago 米其林主廚餐廳、佛羅倫斯牛排館、Sushino 壽司吧、Pummid'Oro 披薩坊等）對照表，依 Costa 官方甲板圖校正。
 * 🛰️ **航線即時追蹤**：一鍵開啟 CruiseMapper（IMO 9343132）查看莎倫娜號目前船位與航跡。
 * 🌬️ **風場海況查詢**：一鍵開啟 Windy 查看航線海域的風速、浪高與天候。
-* ⚡ **零相依性純靜態網頁**：無需後端伺服器，單一 HTML 檔案隨開隨用，亦可離線快取。
+* ⚡ **零相依性純靜態網頁**：無需後端伺服器、無建置流程，隨開隨用。
 
 ---
 
 ## 📂 檔案結構 (Project Structure)
 
 ```text
-├── index.html                    # 互動導覽單頁應用程式 (Single Page App)
+├── index.html                    # 互動導覽單頁應用程式（CSS / 資料 / JS 全內嵌）
+├── sw.js                         # Service Worker：離線快取與更新提示
+├── manifest.webmanifest          # PWA 設定（加入主畫面、圖示、主題色）
+├── icons/                        # PWA 圖示（192 / 512 / apple-touch / favicon）
 ├── costa_serena_deck_guide.md    # 完整 14 個 Deck 設施與餐廳 Markdown 手冊
+├── CLAUDE.md                     # 給 AI 協作者的專案說明
 └── README.md                     # 專案說明與授權條款
 ```
 
