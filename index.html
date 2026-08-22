@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>Costa Serena 莎倫娜號｜設施導覽</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==============================================
+       MOBILE-FIRST CSS — Base: 320px–428px
+       ============================================== */
+    :root {
+      --bg: #07111e;
+      --bg-card: #0d1d34;
+      --bg-card-hover: #142a4a;
+      --bg-surface: #091728;
+      --border: #1a3358;
+      --border-active: #2a5090;
+      --gold: #d4af37;
+      --gold-light: #f5df88;
+      --gold-dim: #9a7b20;
+      --text: #f0f4fc;
+      --text-sec: #9bb0cb;
+      --text-dim: #6b8ab0;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --cyan: #06b6d4;
+      --purple: #8b5cf6;
+      --rose: #f43f5e;
+      --blue: #3b82f6;
+      --font: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --font-serif: 'Cinzel', serif;
+      --safe-b: env(safe-area-inset-bottom, 0px);
+      --safe-t: env(safe-area-inset-top, 0px);
+      --header-h: 52px;
+      --bottom-h: 56px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      width: 100%; max-width: 100vw; overflow-x: hidden;
+      background: var(--bg); color: var(--text);
+      font-family: var(--font); font-size: 15px; line-height: 1.55;
+      min-height: 100vh; min-height: 100dvh;
+      overscroll-behavior-x: none;
+    }
+    body { padding-top: calc(var(--header-h) + var(--safe-t)); padding-bottom: calc(var(--bottom-h) + var(--safe-b) + 8px); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #1a3358; border-radius: 2px; }
+
+    /* ── Header ── */
+    .app-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+      background: rgba(9, 23, 40, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding-top: var(--safe-t);
+      height: calc(var(--header-h) + var(--safe-t));
+    }
+    .header-row {
+      height: var(--header-h); padding: 0 12px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hdr-brand { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; cursor: pointer; }
+    .hdr-logo {
+      width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-dim));
+      display: grid; place-items: center; font-size: 16px;
+      box-shadow: 0 0 8px rgba(212,175,55,0.3);
+    }
+    .hdr-titles { min-width: 0; }
+    .hdr-titles h1 {
+      font-family: var(--font-serif); font-size: 0.88rem; font-weight: 700;
+      color: var(--gold-light); line-height: 1.15;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .hdr-titles p { font-size: 0.65rem; color: var(--text-sec); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hdr-actions { display: flex; gap: 2px; flex-shrink: 0; }
+    .hdr-btn {
+      width: 40px; height: 40px; border-radius: 10px; border: none;
+      background: transparent; color: var(--text-sec);
+      font-size: 1.15rem; display: grid; place-items: center;
+      cursor: pointer; transition: all 0.15s; touch-action: manipulation;
+    }
+    .hdr-btn:active { background: rgba(255,255,255,0.08); transform: scale(0.92); }
+
+    /* ── Specs banner (collapsible) ── */
+    .specs-bar {
+      background: var(--bg-surface); border-bottom: 1px solid var(--border);
+      overflow: hidden; transition: max-height 0.3s ease;
+      max-height: 0;
+    }
+    .specs-bar.open { max-height: 42px; }
+    .specs-scroll {
+      display: flex; gap: 14px; padding: 8px 12px;
+      overflow-x: auto; white-space: nowrap; font-size: 0.72rem; color: var(--text-sec);
+      -webkit-overflow-scrolling: touch;
+    }
+    .specs-scroll strong { color: var(--gold-light); }
+
+    /* ── Deck selector sticky bar ── */
+    .deck-bar {
+      position: sticky; top: calc(var(--header-h) + var(--safe-t));
+      z-index: 50; background: rgba(9,23,40,0.96); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 6px 8px; display: none;
+    }
+    .deck-bar.visible { display: block; }
+    .deck-bar-scroll {
+      display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; -ms-overflow-style: none;
+    }
+    .deck-bar-scroll::-webkit-scrollbar { display: none; }
+    .dk-chip {
+      flex-shrink: 0; padding: 6px 12px; border-radius: 20px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-sec); font-size: 0.78rem; font-weight: 500;
+      cursor: pointer; transition: all 0.15s; touch-action: manipulation;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .dk-chip:active { transform: scale(0.95); }
+    .dk-chip.on {
+      background: var(--gold); color: #07111e; font-weight: 700;
+      border-color: var(--gold-light); box-shadow: 0 0 10px rgba(212,175,55,0.35);
+    }
+    .dk-chip.golden { border-color: rgba(212,175,55,0.4); }
+
+    /* ── Main content area ── */
+    .main { padding: 10px 10px 16px; display: flex; flex-direction: column; gap: 10px; }
+
+    /* ── Section banner (deck header) ── */
+    .sec-banner {
+      background: linear-gradient(135deg, #0f2340 0%, #0b1a2e 100%);
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 14px; position: relative; overflow: hidden;
+    }
+    .sec-banner h2 {
+      font-size: 1.05rem; color: var(--gold-light); font-weight: 700;
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      line-height: 1.3; word-break: break-word;
+    }
+    .sec-badge {
+      display: inline-block; background: var(--gold); color: #07111e;
+      font-size: 0.72rem; font-weight: 800; padding: 2px 7px;
+      border-radius: 4px; font-family: var(--font);
+    }
+    .sec-banner p { color: var(--text-sec); font-size: 0.78rem; margin-top: 4px; line-height: 1.4; word-break: break-word; }
+    .sec-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+    .sec-tag {
+      background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3);
+      color: var(--gold-light); padding: 2px 8px; border-radius: 4px; font-size: 0.68rem;
+    }
+
+    /* ── Facility Accordion List ── */
+    .fac-list { display: flex; flex-direction: column; gap: 6px; }
+    .fac-item {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; transition: border-color 0.2s;
+    }
+    .fac-item.expanded { border-color: rgba(212,175,55,0.4); }
+    .fac-head {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; cursor: pointer; touch-action: manipulation;
+      transition: background 0.15s; min-height: 48px;
+      -webkit-user-select: none; user-select: none;
+    }
+    .fac-head:active { background: rgba(255,255,255,0.04); }
+    .fac-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      display: grid; place-items: center; font-size: 1.05rem; flex-shrink: 0;
+    }
+    .fac-head-info { flex: 1; min-width: 0; }
+    .fac-name { font-size: 0.9rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+    .fac-name-en { font-size: 0.68rem; color: var(--text-dim); font-family: var(--font-serif); line-height: 1.2; margin-top: 1px; }
+    .fac-head-tags { display: flex; gap: 4px; flex-shrink: 0; align-items: center; }
+    .fac-price-tag {
+      font-size: 0.65rem; font-weight: 600; padding: 2px 6px;
+      border-radius: 4px; line-height: 1;
+    }
+    .fac-price-tag.free { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+    .fac-price-tag.paid { background: rgba(245,158,11,0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+    .fac-chevron {
+      width: 28px; height: 28px; display: grid; place-items: center;
+      color: var(--text-dim); font-size: 0.8rem;
+      transition: transform 0.25s ease; flex-shrink: 0;
+    }
+    .fac-item.expanded .fac-chevron { transform: rotate(180deg); }
+
+    .fac-body {
+      max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease;
+      padding: 0 14px;
+    }
+    .fac-item.expanded .fac-body { max-height: 600px; padding: 0 14px 14px; }
+    .fac-body-inner { display: flex; flex-direction: column; gap: 8px; }
+    .fac-meta {
+      display: flex; flex-wrap: wrap; gap: 4px; font-size: 0.7rem;
+    }
+    .fac-meta-pill {
+      padding: 2px 7px; border-radius: 4px; display: inline-flex;
+      align-items: center; gap: 3px; line-height: 1.3;
+    }
+    .fac-meta-pill.loc { background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.25); color: #93c5fd; }
+    .fac-meta-pill.deck { background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.25); color: var(--gold-light); }
+    .fac-desc { font-size: 0.82rem; color: #c7d5e8; line-height: 1.6; word-break: break-word; }
+    .fac-tips {
+      background: rgba(0,0,0,0.3); border-left: 3px solid var(--gold);
+      padding: 8px 10px; border-radius: 0 8px 8px 0;
+      font-size: 0.76rem; color: var(--text-sec); line-height: 1.45;
+      word-break: break-word;
+    }
+    .fac-tips strong { color: var(--gold-light); }
+    .fac-star-row { display: flex; justify-content: flex-end; }
+    .btn-star {
+      background: none; border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text-dim); font-size: 0.78rem; padding: 6px 12px;
+      cursor: pointer; display: flex; align-items: center; gap: 4px;
+      transition: all 0.15s; touch-action: manipulation;
+      min-height: 36px;
+    }
+    .btn-star:active { transform: scale(0.95); }
+    .btn-star.on { color: var(--gold); border-color: rgba(212,175,55,0.4); background: rgba(212,175,55,0.08); }
+
+    /* ── Overview Mode ── */
+    .overview-section { display: flex; flex-direction: column; gap: 10px; }
+
+    /* Quick finder */
+    .qf-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    }
+    .qf-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px; cursor: pointer;
+      transition: all 0.15s; touch-action: manipulation;
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .qf-card:active { transform: scale(0.97); background: var(--bg-card-hover); }
+    .qf-card-icon { font-size: 1.4rem; line-height: 1; }
+    .qf-card-label { font-size: 0.8rem; font-weight: 600; color: var(--text); line-height: 1.25; }
+    .qf-card-decks { font-size: 0.68rem; color: var(--gold-light); font-weight: 600; }
+    .qf-card-hint { font-size: 0.65rem; color: var(--text-dim); line-height: 1.2; }
+
+    /* Deck rows in overview */
+    .ov-deck {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; transition: border-color 0.2s;
+    }
+    .ov-deck.golden { border-left: 3px solid var(--gold); background: linear-gradient(90deg, rgba(212,175,55,0.08) 0%, var(--bg-card) 30%); }
+    .ov-deck.ov-expanded { border-color: rgba(212,175,55,0.35); }
+    .ov-deck-head {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px; cursor: pointer; touch-action: manipulation;
+      min-height: 48px; -webkit-user-select: none; user-select: none;
+    }
+    .ov-deck-head:active { background: rgba(255,255,255,0.03); }
+    .ov-num {
+      min-width: 36px; text-align: center; font-family: var(--font-serif);
+      font-weight: 700; font-size: 0.88rem; color: var(--gold-light);
+      background: var(--bg-surface); border: 1px solid var(--border);
+      padding: 3px 6px; border-radius: 6px; flex-shrink: 0;
+    }
+    .ov-deck.golden .ov-num { background: var(--gold); color: #07111e; border-color: var(--gold-light); }
+    .ov-deck-info { flex: 1; min-width: 0; }
+    .ov-deck-title {
+      font-size: 0.88rem; font-weight: 600; color: var(--text);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .ov-deck-sub { font-size: 0.7rem; color: var(--text-sec); line-height: 1.2; margin-top: 1px; }
+    .ov-pills {
+      display: flex; flex-wrap: wrap; gap: 4px; padding: 0 12px;
+      margin-top: -4px; padding-bottom: 10px;
+    }
+    .ov-pill {
+      font-size: 0.68rem; padding: 2px 6px; border-radius: 4px;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      color: #c8d8ec; display: inline-flex; align-items: center; gap: 3px;
+    }
+    .ov-pill.t-free { border-left: 2px solid var(--green); }
+    .ov-pill.t-paid { border-left: 2px solid var(--amber); }
+    .ov-pill.t-pool { border-left: 2px solid var(--cyan); }
+    .ov-pill.t-ent { border-left: 2px solid var(--purple); }
+    .ov-chevron {
+      width: 28px; height: 28px; display: grid; place-items: center;
+      color: var(--text-dim); font-size: 0.8rem; transition: transform 0.25s;
+      flex-shrink: 0;
+    }
+    .ov-deck.ov-expanded .ov-chevron { transform: rotate(180deg); }
+    .ov-expand {
+      max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+    }
+    .ov-deck.ov-expanded .ov-expand { max-height: 3000px; }
+    .ov-expand-inner { padding: 0 10px 10px; display: flex; flex-direction: column; gap: 6px; }
+
+    /* ── Search overlay ── */
+    .search-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(7,17,30,0.97); backdrop-filter: blur(20px);
+      display: flex; flex-direction: column;
+      transform: translateY(-100%); transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+      padding-top: var(--safe-t);
+    }
+    .search-overlay.open { transform: translateY(0); }
+    .search-top {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 12px; border-bottom: 1px solid var(--border);
+    }
+    .search-input-wrap { flex: 1; position: relative; }
+    .search-input {
+      width: 100%; background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 12px 10px 36px;
+      color: var(--text); font-size: 16px; font-family: inherit;
+      outline: none; -webkit-appearance: none;
+    }
+    .search-input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(212,175,55,0.2); }
+    .search-input-icon {
+      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      font-size: 0.9rem; color: var(--text-dim); pointer-events: none;
+    }
+    .search-cancel {
+      background: none; border: none; color: var(--gold-light);
+      font-size: 0.88rem; cursor: pointer; padding: 8px;
+      touch-action: manipulation; white-space: nowrap;
+    }
+    .search-chips {
+      display: flex; gap: 6px; padding: 10px 12px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      border-bottom: 1px solid var(--border);
+      scrollbar-width: none;
+    }
+    .search-chips::-webkit-scrollbar { display: none; }
+    .s-chip {
+      flex-shrink: 0; padding: 6px 12px; border-radius: 20px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-sec); font-size: 0.76rem; cursor: pointer;
+      transition: all 0.15s; touch-action: manipulation;
+    }
+    .s-chip.on {
+      background: rgba(212,175,55,0.2); border-color: var(--gold);
+      color: var(--gold-light); font-weight: 600;
+    }
+    .search-results {
+      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      padding: 10px 12px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .search-empty {
+      text-align: center; color: var(--text-dim); padding: 40px 20px;
+      font-size: 0.85rem;
+    }
+    .search-empty-icon { font-size: 2rem; margin-bottom: 8px; opacity: 0.5; }
+
+    /* ── Bottom Navigation ── */
+    .bottom-nav {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
+      background: rgba(9,23,40,0.97); backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      padding: 4px 0 calc(4px + var(--safe-b));
+      box-shadow: 0 -2px 16px rgba(0,0,0,0.4);
+    }
+    .bottom-nav-inner { display: flex; justify-content: space-around; align-items: center; }
+    .nav-tab {
+      background: none; border: none; color: var(--text-dim);
+      display: flex; flex-direction: column; align-items: center; gap: 1px;
+      font-size: 0.62rem; cursor: pointer; padding: 6px 12px;
+      border-radius: 8px; transition: all 0.15s;
+      touch-action: manipulation; min-width: 56px; position: relative;
+    }
+    .nav-tab-icon { font-size: 1.2rem; line-height: 1; transition: transform 0.15s; }
+    .nav-tab.on { color: var(--gold-light); font-weight: 700; }
+    .nav-tab.on .nav-tab-icon { transform: scale(1.1); }
+    .nav-tab-badge {
+      position: absolute; top: 1px; right: 6px;
+      background: var(--rose); color: #fff; font-size: 0.55rem;
+      padding: 1px 4px; border-radius: 8px; font-weight: 700; min-width: 14px; text-align: center;
+    }
+
+    /* ── More menu (popover) ── */
+    .more-menu {
+      position: fixed; bottom: calc(var(--bottom-h) + var(--safe-b) + 4px);
+      right: 8px; z-index: 85;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 6px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      display: none; flex-direction: column; min-width: 160px;
+      animation: slideUp 0.2s ease;
+    }
+    .more-menu.open { display: flex; }
+    .more-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 12px; border-radius: 10px; font-size: 0.85rem;
+      color: var(--text); cursor: pointer; transition: background 0.1s;
+      border: none; background: none; width: 100%; text-align: left;
+      touch-action: manipulation;
+    }
+    .more-item:active { background: rgba(255,255,255,0.06); }
+
+    /* ── Modal bottom sheet ── */
+    .modal-bg {
+      position: fixed; inset: 0; z-index: 150;
+      background: rgba(4,10,18,0.8); backdrop-filter: blur(6px);
+      display: none; animation: fadeIn 0.2s;
+    }
+    .modal-bg.open { display: block; }
+    .modal-sheet {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 151;
+      background: var(--bg-card); border-top: 1px solid var(--border);
+      border-radius: 20px 20px 0 0;
+      max-height: 88vh; display: none; flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+      padding-bottom: var(--safe-b);
+    }
+    .modal-sheet.open { display: flex; transform: translateY(0); }
+    .modal-handle-bar {
+      display: flex; justify-content: center; padding: 10px 0 4px;
+      cursor: grab; touch-action: none;
+    }
+    .modal-handle {
+      width: 36px; height: 4px; border-radius: 2px;
+      background: rgba(255,255,255,0.2);
+    }
+    .modal-sheet-header {
+      padding: 8px 16px 12px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-sheet-header h3 {
+      font-size: 1rem; color: var(--gold-light);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .modal-close {
+      width: 36px; height: 36px; border-radius: 8px; border: none;
+      background: rgba(255,255,255,0.06); color: var(--text-sec);
+      font-size: 1.3rem; display: grid; place-items: center;
+      cursor: pointer; touch-action: manipulation;
+    }
+    .modal-sheet-body {
+      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
+    }
+
+    /* guide tip cards */
+    .tip-card {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px;
+    }
+    .tip-card h4 { color: var(--gold-light); margin-bottom: 4px; font-size: 0.88rem; display: flex; align-items: center; gap: 5px; }
+    .tip-card p { font-size: 0.82rem; color: #c8d8ec; line-height: 1.55; word-break: break-word; }
+
+    /* dining cards (mobile-friendly, no table) */
+    .dining-card {
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px;
+    }
+    .dining-card-name { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .dining-card-loc { font-size: 0.72rem; color: var(--gold-light); margin-bottom: 4px; }
+    .dining-card-desc { font-size: 0.78rem; color: var(--text-sec); line-height: 1.4; }
+
+    /* ── Back to top ── */
+    .btn-top {
+      position: fixed; right: 12px; bottom: calc(var(--bottom-h) + var(--safe-b) + 12px);
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--bg-card); border: 1px solid var(--gold);
+      color: var(--gold-light); font-size: 1.1rem;
+      display: grid; place-items: center; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      opacity: 0; visibility: hidden; transition: all 0.2s;
+      z-index: 60; touch-action: manipulation;
+    }
+    .btn-top.show { opacity: 1; visibility: visible; }
+
+    /* ── Empty state ── */
+    .empty-box {
+      background: var(--bg-card); border: 1px dashed var(--border);
+      border-radius: 12px; padding: 30px 16px; text-align: center; color: var(--text-sec);
+    }
+    .empty-box-icon { font-size: 2rem; margin-bottom: 6px; opacity: 0.5; }
+
+    /* ── Animations ── */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* ==============================================
+       TABLET (min-width: 768px)
+       ============================================== */
+    @media (min-width: 768px) {
+      :root { --header-h: 56px; }
+      .main { padding: 14px; gap: 12px; max-width: 800px; margin: 0 auto; }
+      .qf-grid { grid-template-columns: repeat(4, 1fr); }
+      .fac-list { gap: 8px; }
+    }
+
+    /* ==============================================
+       DESKTOP (min-width: 1024px)
+       ============================================== */
+    @media (min-width: 1024px) {
+      :root { --header-h: 58px; --bottom-h: 0px; }
+      body { padding-bottom: 0; }
+      .bottom-nav { display: none; }
+      .btn-top { bottom: 24px; right: 24px; }
+
+      .main { max-width: 1100px; padding: 20px; gap: 16px; }
+      .desktop-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 20px; }
+      .desktop-sidebar {
+        position: sticky; top: calc(var(--header-h) + var(--safe-t) + 12px);
+        height: calc(100vh - var(--header-h) - var(--safe-t) - 24px);
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: 14px; overflow: hidden;
+        display: flex; flex-direction: column;
+      }
+      .desktop-sidebar-header {
+        padding: 12px 14px; border-bottom: 1px solid var(--border);
+        font-size: 0.85rem; font-weight: 600; color: var(--gold-light);
+      }
+      .desktop-sidebar-list { flex: 1; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 3px; }
+      .desk-deck-btn {
+        display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+        border-radius: 8px; border: 1px solid transparent; background: transparent;
+        color: var(--text); cursor: pointer; text-align: left; width: 100%;
+        transition: all 0.15s; font-size: 0.82rem;
+      }
+      .desk-deck-btn:hover { background: var(--bg-card-hover); border-color: var(--border); }
+      .desk-deck-btn.on {
+        background: linear-gradient(90deg, rgba(212,175,55,0.2), rgba(37,99,235,0.1));
+        border-color: var(--gold);
+      }
+      .desk-deck-badge {
+        width: 28px; height: 28px; border-radius: 6px;
+        background: var(--bg-surface); border: 1px solid var(--border);
+        display: grid; place-items: center; font-weight: 700;
+        font-family: var(--font-serif); font-size: 0.78rem; color: var(--gold-light);
+        flex-shrink: 0;
+      }
+      .desk-deck-btn.on .desk-deck-badge { background: var(--gold); color: #07111e; border-color: var(--gold-light); }
+      .desk-deck-text { min-width: 0; }
+      .desk-deck-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .desk-deck-hint { font-size: 0.68rem; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+      .desktop-nav-btns { display: flex; gap: 6px; flex-shrink: 0; }
+      .desktop-nav-btns .hdr-btn { width: auto; padding: 0 12px; font-size: 0.82rem; gap: 5px; display: flex; align-items: center; }
+
+      .hdr-actions .nav-search-btn { display: none; }
+
+      .modal-sheet {
+        left: 50%; right: auto; transform: translateX(-50%) translateY(100%);
+        width: 600px; max-width: 90vw; border-radius: 20px 20px 0 0;
+      }
+      .modal-sheet.open { transform: translateX(-50%) translateY(0); }
+    }
+
+    /* ── Hide desktop-only elements on mobile ── */
+    .desktop-layout { display: none; }
+    .desktop-sidebar { display: none; }
+    .desktop-nav-btns { display: none; }
+    @media (min-width: 1024px) {
+      .desktop-layout { display: grid; }
+      .desktop-sidebar { display: flex; }
+      .desktop-nav-btns { display: flex; }
+      .deck-bar { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Header ─── -->
+<header class="app-header">
+  <div class="header-row">
+    <div class="hdr-brand" onclick="go('overview')">
+      <div class="hdr-logo">🔱</div>
+      <div class="hdr-titles">
+        <h1>COSTA SERENA 莎倫娜號</h1>
+        <p>海上古羅馬．眾神之船</p>
+      </div>
+    </div>
+    <div class="hdr-actions">
+      <button class="hdr-btn nav-search-btn" onclick="openSearch()" title="搜尋">🔍</button>
+      <button class="hdr-btn" onclick="toggleSpecs()" title="船舶資訊">📋</button>
+    </div>
+    <!-- Desktop inline nav buttons -->
+    <div class="desktop-nav-btns">
+      <button class="hdr-btn" onclick="openSearch()">🔍 搜尋</button>
+      <button class="hdr-btn" onclick="go('overview')" id="dBtnOv">🚢 速覽</button>
+      <button class="hdr-btn" onclick="go('single')" id="dBtnSg">🏛️ 單層</button>
+      <button class="hdr-btn" onclick="go('starred')" id="dBtnSt">⭐ 收藏</button>
+      <button class="hdr-btn" onclick="openModal('navModal')">🧭 動線</button>
+      <button class="hdr-btn" onclick="openModal('dineModal')">🍽️ 餐飲</button>
+    </div>
+  </div>
+</header>
+
+<!-- Specs bar (collapsed by default) -->
+<div class="specs-bar" id="specsBar">
+  <div class="specs-scroll">
+    <span>⚖️ <strong>114,500 GT</strong></span>
+    <span>📏 <strong>290m</strong></span>
+    <span>👥 <strong>3,780人</strong></span>
+    <span>🛏️ <strong>1,504間</strong></span>
+    <span>🚢 <strong>13層甲板</strong></span>
+    <span>⚡ <strong>21.5節</strong></span>
+  </div>
+</div>
+
+<!-- Deck bar (shown in single-deck mode) -->
+<nav class="deck-bar" id="deckBar">
+  <div class="deck-bar-scroll" id="deckBarScroll"><!-- JS --></div>
+</nav>
+
+<!-- Main content -->
+<main class="main" id="mainContent"><!-- JS renders here --></main>
+
+<!-- Back to top -->
+<button class="btn-top" id="btnTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- Bottom nav -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="nav-tab on" id="tabOv" onclick="go('overview')">
+      <span class="nav-tab-icon">🚢</span><span>速覽</span>
+    </button>
+    <button class="nav-tab" id="tabSg" onclick="go('single')">
+      <span class="nav-tab-icon">🏛️</span><span>樓層</span>
+    </button>
+    <button class="nav-tab" id="tabSt" onclick="go('starred')">
+      <span class="nav-tab-icon">⭐</span><span>收藏</span>
+      <span class="nav-tab-badge" id="starBadge">0</span>
+    </button>
+    <button class="nav-tab" id="tabMore" onclick="toggleMore()">
+      <span class="nav-tab-icon">☰</span><span>更多</span>
+    </button>
+  </div>
+</nav>
+
+<!-- More menu popover -->
+<div class="more-menu" id="moreMenu">
+  <button class="more-item" onclick="openSearch(); closeMore();">🔍 搜尋設施</button>
+  <button class="more-item" onclick="openModal('dineModal'); closeMore();">🍽️ 餐飲速查表</button>
+  <button class="more-item" onclick="openModal('navModal'); closeMore();">🧭 防迷路指南</button>
+  <button class="more-item" onclick="toggleSpecs(); closeMore();">📋 船舶基本資料</button>
+</div>
+
+<!-- Search overlay -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-top">
+    <div class="search-input-wrap">
+      <span class="search-input-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="搜尋設施、餐廳、泳池、劇院..." oninput="doSearch()">
+    </div>
+    <button class="search-cancel" onclick="closeSearch()">取消</button>
+  </div>
+  <div class="search-chips" id="searchChips">
+    <button class="s-chip on" data-cat="all" onclick="setFilter('all')">全部</button>
+    <button class="s-chip" data-cat="dining" onclick="setFilter('dining')">🍽️ 美食</button>
+    <button class="s-chip" data-cat="pool" onclick="setFilter('pool')">🏊 泳池</button>
+    <button class="s-chip" data-cat="entertainment" onclick="setFilter('entertainment')">🎭 娛樂</button>
+    <button class="s-chip" data-cat="bar" onclick="setFilter('bar')">🍸 酒吧</button>
+    <button class="s-chip" data-cat="spa" onclick="setFilter('spa')">💆 水療</button>
+    <button class="s-chip" data-cat="kids" onclick="setFilter('kids')">👶 親子</button>
+    <button class="s-chip" data-cat="service" onclick="setFilter('service')">🛎️ 服務</button>
+    <button class="s-chip" data-cat="shopping" onclick="setFilter('shopping')">🛍️ 購物</button>
+    <button class="s-chip" data-cat="cabin" onclick="setFilter('cabin')">🛏️ 客艙</button>
+  </div>
+  <div class="search-results" id="searchResults">
+    <div class="search-empty"><div class="search-empty-icon">🔍</div>輸入關鍵字搜尋全船設施</div>
+  </div>
+</div>
+
+<!-- Modal: Navigation Guide -->
+<div class="modal-bg" id="navModalBg" onclick="closeModal('navModal')"></div>
+<div class="modal-sheet" id="navModal">
+  <div class="modal-handle-bar"><div class="modal-handle"></div></div>
+  <div class="modal-sheet-header">
+    <h3>🧭 防迷路指南</h3>
+    <button class="modal-close" onclick="closeModal('navModal')">✕</button>
+  </div>
+  <div class="modal-sheet-body">
+    <div class="tip-card">
+      <h4>🌟 黃金貫通甲板</h4>
+      <p>全船最容易通行的樓層為 <strong>Deck 5 (雙子座)</strong> 與 <strong>Deck 9 (天秤座)</strong>，完全無阻隔直通船頭至船尾。若迷路請先搭電梯到 5 樓或 9 樓。</p>
+    </div>
+    <div class="tip-card">
+      <h4>⚠️ 3 樓與 4 樓走不過去</h4>
+      <p><strong>Deck 3 與 Deck 4 中央被主廚房完全隔斷</strong>。若在 3 樓船頭想到船尾，請先搭電梯上 Deck 5 穿越，再下樓。</p>
+    </div>
+    <div class="tip-card">
+      <h4>🛗 三大電梯群</h4>
+      <p>• <strong>船頭電梯群</strong>：直達劇院、健身房、Samsara Spa<br>• <strong>船中電梯群（萬神殿）</strong>：3 部透明景觀電梯，3F→9F<br>• <strong>船尾電梯群</strong>：直達主餐廳、迪斯可、天王星泳池</p>
+    </div>
+    <div class="tip-card">
+      <h4>☔ 雙穹頂全天候泳池</h4>
+      <p>Deck 9 的太陽泳池 (Lido Sole) 與天王星泳池 (Lido Urania) 皆有全自動伸縮玻璃天幕，陰雨天也能安心戲水。</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Dining Guide -->
+<div class="modal-bg" id="dineModalBg" onclick="closeModal('dineModal')"></div>
+<div class="modal-sheet" id="dineModal">
+  <div class="modal-handle-bar"><div class="modal-handle"></div></div>
+  <div class="modal-sheet-header">
+    <h3>🍽️ 全船餐飲速查</h3>
+    <button class="modal-close" onclick="closeModal('dineModal')">✕</button>
+  </div>
+  <div class="modal-sheet-body">
+    <p style="font-size:0.82rem;color:var(--gold-light);font-weight:600;">🟢 免費包套餐廳</p>
+    <div class="dining-card">
+      <div class="dining-card-name">瑟瑞斯餐廳 Ceres</div>
+      <div class="dining-card-loc">📍 Deck 3 & 4（船尾）</div>
+      <div class="dining-card-desc">正統歐陸精緻點餐晚宴，分兩場次供應</div>
+    </div>
+    <div class="dining-card">
+      <div class="dining-card-name">維斯塔餐廳 Vesta</div>
+      <div class="dining-card-loc">📍 Deck 3 & 4（船中偏後）</div>
+      <div class="dining-card-desc">義式與國際經典料理點餐主餐廳</div>
+    </div>
+    <div class="dining-card">
+      <div class="dining-card-name">波羅馬特自助百匯 Prometeo</div>
+      <div class="dining-card-loc">📍 Deck 9 & 10（船尾）</div>
+      <div class="dining-card-desc">全天候供應早午晚餐百匯、下午茶與深夜宵夜</div>
+    </div>
+
+    <p style="font-size:0.82rem;color:var(--amber);font-weight:600;margin-top:6px;">🟠 特色付費餐廳（需預約）</p>
+    <div class="dining-card">
+      <div class="dining-card-name">🍲 海上撈火鍋 Hot Pot</div>
+      <div class="dining-card-loc">📍 Deck 9（船尾自助區旁）</div>
+      <div class="dining-card-desc">鮮甜/麻辣鴛鴦鍋底、頂級雪花牛與海鮮拼盤</div>
+    </div>
+    <div class="dining-card">
+      <div class="dining-card-name">🍕 Pummid'Oro 義式披薩坊</div>
+      <div class="dining-card-loc">📍 Deck 9（船中偏後）</div>
+      <div class="dining-card-desc">天然酵母手工現擀現烤拿坡里披薩</div>
+    </div>
+    <div class="dining-card">
+      <div class="dining-card-name">🍣 Sushino at Costa 壽司吧</div>
+      <div class="dining-card-loc">📍 Deck 3 / Deck 5</div>
+      <div class="dining-card-desc">新鮮刺身、炙燒握壽司、花壽司套餐</div>
+    </div>
+    <div class="dining-card">
+      <div class="dining-card-name">⭐ 卡薩諾瓦星廚餐廳 Club Serena</div>
+      <div class="dining-card-loc">📍 Deck 11（船中）</div>
+      <div class="dining-card-desc">名廚聯名設計菜單，頂級尊榮客製晚宴</div>
+    </div>
+    <div class="dining-card">
+      <div class="dining-card-name">🍫 尤文塔斯甜品巧克力吧</div>
+      <div class="dining-card-loc">📍 Deck 5（雙子座大道）</div>
+      <div class="dining-card-desc">手工冰淇淋、巧克力噴泉、可麗餅、Lavazza 咖啡</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+// DATA (same as before, fully preserved)
+// ════════════════════════════════════════════════
+const D=[{id:14,num:"14",zh:"船帆座",it:"Vela",icon:"⛵",gold:false,desc:"全船制高點觀景台、巨型水上滑道起點與頂層日光浴場",nature:"頂層觀景與水上休閒",tags:["頂層全景","滑水道起點","日光浴"],fac:[{id:"f14_1",zh:"頂層全景觀景甲板",en:"Ponte Aperto / Open Observation Deck",cat:"pool",loc:"全層 / 船中至船尾",free:true,icon:"🔭",desc:"全船最高露天甲板，具備 360 度無遮蔽全景海景視野，是觀賞海上日出、日落、海鷗與進出港巡航的最佳拍攝點。",tips:"清晨與黃昏拍照光線絕佳；海風較強時請注意保暖。"},{id:"f14_2",zh:"巨型旋轉水上滑道起點",en:"Toboga Waterslide Entrance",cat:"pool",loc:"船尾",free:true,icon:"🌊",desc:"全船最刺激的水上娛樂設施出發口，乘客由此順著旋轉迴路一路滑行俯衝，直降至第 11 層的彩虹泳池。",tips:"開放時間視海象與風速調整；請依救生員指示排隊入場。"},{id:"f14_3",zh:"頂層靜謐日光浴場",en:"Top Solarium",cat:"pool",loc:"船中",free:true,icon:"☀️",desc:"遠離人群的靜態日光浴躺椅區，享受純粹海風與陽光沐浴。",tips:"日光浴躺椅先到先得，請保持安靜放鬆氛圍。"}]},{id:12,num:"12",zh:"飛馬座",it:"Pegasus",icon:"🐎",gold:false,desc:"頂級水療熱療核心區、多功能綜合體育場與幼童戲水池",nature:"水療熱療核心與綜合球場",tags:["海水熱療池","多功能球場","幼兒戲水"],fac:[{id:"f12_1",zh:"聖思羅海水熱療核心區",en:"Samsara Thalassotherapy Pool & Thermal Suite",cat:"spa",loc:"船頭",free:false,icon:"♨️",desc:"富含微量礦物質加溫海水水療池，並配備土耳其蒸氣浴 (Turkish Bath)、芬蘭乾桑拿 (Sauna) 與溫熱岩盤室 (Laconium / Tepidarium)。",tips:"需持有 Samsara 水療通票或入住水療套房；全面放鬆身心的極致享受。"},{id:"f12_2",zh:"東方日式茶室",en:"Samsara Oriental Tea House",cat:"spa",loc:"船頭",free:false,icon:"🍵",desc:"在水療與桑拿療程後，靜心品嚐由世界各地嚴選香草茶與養生茶品的日式禪風茶空間。",tips:"伴隨落地窗海景，建議預留 30 分鐘享受靜心時光。"},{id:"f12_3",zh:"多功能綜合體育場",en:"Campo da Gioco / Multi-sports Court",cat:"entertainment",loc:"船尾",free:true,icon:"🏀",desc:"四周設有安全防護網的戶外大型綜合球場，可自由進行籃球對抗賽、排球、五人制足球友誼賽及網球活動。",tips:"每日定時舉辦全船乘客運動友誼錦標賽，可向娛樂團隊報名。"},{id:"f12_4",zh:"幼兒專屬戲水池",en:"Baby Squok Pool",cat:"kids",loc:"船尾",free:true,icon:"🧸",desc:"專為幼童設計的淺水噴泉遊戲池，設有可愛卡通造景與安全防滑地墊。",tips:"幼兒入池需穿著專用防水尿布，並由家長全程陪同。"},{id:"f12_5",zh:"Samsara 頂級水療客艙區",en:"Samsara Suites & Staterooms",cat:"cabin",loc:"船頭",free:false,icon:"🛏️",desc:"尊貴的水療專屬客房，享有直通 Spa 區的專用電梯與全套 Samsara 水療特權。",tips:"房內提供頂級精油沐浴備品、專屬浴袍與芳療花灑。"}]},{id:11,num:"11",zh:"處女座",it:"Virgo",icon:"💃",gold:false,desc:"聖思羅水療中心、全景海景健身房、星廚特色餐廳與慢跑道",nature:"健身中心、星廚晚宴與彩虹泳池",tags:["全景健身房","星廚餐廳","彩虹泳池","慢跑道"],fac:[{id:"f11_1",zh:"全景海景健身中心",en:"Fitness Center / Panoramic Gym",cat:"spa",loc:"船頭",free:true,icon:"🏃",desc:"擁有 270 度壯闊海景的現代化健身中心，配備 Technogym 心肺跑步機、滑步機、重訓器械與專業瑜珈/飛輪教室。",tips:"免費使用；進入請穿著運動服裝與室內運動鞋；飛輪與專業瑜珈私教課需額外預約。"},{id:"f11_2",zh:"維納斯美容沙龍與芳療室",en:"Venus Beauty Salon & Massage Suites",cat:"spa",loc:"船頭",free:false,icon:"💆",desc:"提供專業芳香精油按摩、熱石護理、深層面部保養、美髮造型、美甲沙龍與男士修容服務。",tips:"登船日通常有水療導覽與限時早鳥優惠套餐，建議提早預約熱門時段。"},{id:"f11_3",zh:"卡薩諾瓦星廚餐廳",en:"Ristorante Casanova / Club Serena",cat:"dining",loc:"船中",free:false,icon:"⭐",desc:"歌詩達旗艦付費特色餐廳，由國際名廚聯名打造尊榮客製化套餐，嚴選高級牛排與海鮮佐以頂級侍酒師推薦紅白酒。",tips:"需提前預約，建議穿著正式或優雅商務休閒服裝 (Smart Casual)。"},{id:"f11_4",zh:"麗都彩虹泳池與滑水道緩衝池",en:"Lido Iris & Waterslide Splash Zone",cat:"pool",loc:"船尾",free:true,icon:"🏊",desc:"開闊的露天戶外泳池，同時作為上方第 14 層滑水道的衝刺著陸緩衝水池，周邊環繞舒適躺椅。",tips:"晴天開放；池畔常有現場 DJ 或熱力舞蹈教學。"},{id:"f11_5",zh:"露天環形慢跑道",en:"Outdoor Jogging & Walking Track",cat:"spa",loc:"船中",free:true,icon:"👟",desc:"圍繞船身中央特設的防滑露天環形跑道，清晨可一邊欣賞海平面旭日一邊晨跑健走。",tips:"請依跑道標示方向順向慢跑；上午尖峰時段請留意散步旅客。"}]},{id:10,num:"10",zh:"金牛座",it:"Taurus",icon:"🐂",gold:false,desc:"波羅馬特自助餐廳二樓、思高兒童俱樂部與青少年專屬空間",nature:"兒童親子天地與自助餐上層",tags:["思高兒童俱樂部","青少年區","自助餐二樓"],fac:[{id:"f10_1",zh:"思高兒童俱樂部",en:"Squok Club (Mini & Maxi Club)",cat:"kids",loc:"船中偏後",free:true,icon:"👶",desc:"歌詩達官方兒童樂園（分為 3~6 歲 Mini 組與 7~11 歲 Maxi 組），由專業輔導員帶領尋寶遊戲、手作勞作、小船長體驗、睡衣派對等。",tips:"免費提供日間與部分夜間托兒活動；3 歲以上且已戒尿布兒童即可免費登記參加。"},{id:"f10_2",zh:"青少年俱樂部",en:"Teen Zone / Teen Club (12-17歲)",cat:"kids",loc:"船尾",free:true,icon:"🎮",desc:"專為 12~17 歲青少年規劃的潮流交誼天地，設有熱門電玩遊戲主機、手足球檯、街舞教學、音樂社交與專屬無酒精派對。",tips:"輔導員全程維護安全，是青少年結交跨國朋友的最佳場所。"},{id:"f10_3",zh:"波羅馬特自助餐廳 (二樓用餐區)",en:"Ristorante Buffet Prometeo (Upper Level)",cat:"dining",loc:"船尾",free:true,icon:"🍽️",desc:"自助餐廳的挑高二樓雅座，擁有居高臨下的開闊海景與較為安靜的用餐氛圍。",tips:"尖峰用餐時段若 9 樓客滿，可端餐點上 10 樓入座，通常更容易找到靠窗景觀位。"},{id:"f10_4",zh:"環池露天日光浴場",en:"Lido Upper Solarium",cat:"pool",loc:"船中",free:true,icon:"🪑",desc:"俯瞰 9 樓太陽泳池的挑高看台躺椅區，視野極佳，能一邊曬太陽一邊欣賞中庭 LED 大螢幕的精彩影片。",tips:"觀賞池畔派對與演出的絕佳制高點。"}]},{id:9,num:"9",zh:"天秤座",it:"Libra",icon:"⚖️",gold:true,desc:"雙可伸縮穹頂泳池、日光浴場與全天候百匯美食中心（全通甲板）",nature:"黃金貫通層 · 泳池中心與百匯火鍋",tags:["黃金全通甲板","太陽泳池","天王星泳池","百匯自助餐","海上火鍋","手工披薩"],fac:[{id:"f9_1",zh:"麗都太陽泳池 & 巨型 LED 大螢幕",en:"Lido Sole Pool & Giant LED Screen",cat:"pool",loc:"船中",free:true,icon:"🏊",desc:"全船主要休閒中樞，配備「自動可伸縮玻璃天幕穹頂」、恆溫泳池、2 座溫水按摩水療池 (Jacuzzi)、戶外巨幕影院與太陽酒吧 (Bar Sole)。",tips:"全天候開放（晴天開頂、陰雨天閉合）；夜間常播放露天星空電影院。"},{id:"f9_2",zh:"麗都天王星泳池",en:"Lido Urania Pool",cat:"pool",loc:"船尾",free:true,icon:"🌊",desc:"位於船尾的第二座玻璃穹頂恆溫泳池，附設 2 座按摩浴缸與天王星酒吧 (Bar Urania)，氛圍相比太陽泳池更為寧靜悠閒。",tips:"適合喜愛靜心游泳或閱讀的旅客，靠近自助餐廳後方。"},{id:"f9_3",zh:"波羅馬特自助餐廳 (主層)",en:"Ristorante Buffet Prometeo",cat:"dining",loc:"船尾",free:true,icon:"🥗",desc:"全船最大免費自助百匯餐廳，供應早、午、下午茶、晚餐與深夜點心，匯聚中西熱炒、現切烤肉、沙拉冷盤、義大利麵、甜點與水果。",tips:"免費自由取用；船尾設有大片觀景落地窗，海景一覽無遺。"},{id:"f9_4",zh:"海上撈火鍋 (Hot Pot)",en:"Hot Pot Restaurant",cat:"dining",loc:"船尾 (自助區旁)",free:false,icon:"🍲",desc:"亞洲航次極受歡迎的付費特色餐廳，提供鮮香原湯、香辣麻辣等鴛鴦鍋底，搭配頂級雪花牛、海鮮拼盤與手打麵條。",tips:"需提前透過 Costa App 或餐廳前台預約；因座位有限建議登船首日即刻預訂。"},{id:"f9_5",zh:"Pummid'Oro 義式手工披薩坊",en:"Pummid'Oro Pizzeria",cat:"dining",loc:"船中偏後",free:false,icon:"🍕",desc:"100% 義大利純手工現擀現烤披薩，嚴選天然酵母麵團與莫札瑞拉起司，呈現最道地的拿坡里香脆風味。",tips:"單點付費；晚間至深夜宵夜時段熱門首選。"},{id:"f9_6",zh:"美式漢堡燒烤輕食吧",en:"Grill & Burger Corner",cat:"dining",loc:"船中 (泳池畔)",free:true,icon:"🍔",desc:"位於泳池畔的快餐區，定時供應現炸熱騰騰薯條、美式牛肉漢堡與熱狗點心。",tips:"游泳戲水後的最佳能量補給站（供餐時段請以每日船上日誌為準）。"}]},{id:8,num:"8",zh:"英仙座",it:"Perseus",icon:"⚔️",gold:false,desc:"全層客艙住宿與船長駕駛室 (Bridge)",nature:"客房住宿層與艦橋管制區",tags:["陽台客艙","高級套房","艦橋駕駛室"],fac:[{id:"f8_1",zh:"陽台房與全景套房客艙區",en:"Balcony Staterooms & Suites",cat:"cabin",loc:"全層",free:false,icon:"🛏️",desc:"擁有私人海景陽台的高級客艙集中區，可隨時走出房門吹著海風享受私密海平線風光。",tips:"距離頂層 9 樓泳池餐廳僅需步行一層樓梯，上下樓極為便利。"},{id:"f8_2",zh:"艦橋 / 船長駕駛台",en:"Ship's Bridge / Wheelhouse",cat:"service",loc:"船頭 (非公開管制區)",free:false,icon:"⚓",desc:"郵輪的核心指揮中心，配備先進雷達、衛星導航與航行控制系統，由船長與資深航海團隊 24 小時值守。",tips:"非公開區域；部分航次若有「船長艦橋幕後導覽團」可額外付費報名參觀。"}]},{id:7,num:"7",zh:"水瓶座",it:"Aquarius",icon:"🏺",gold:false,desc:"客艙住宿層（全船豪華頂級套房集中區）",nature:"全船尊爵豪華套房集中層",tags:["全景豪華套房","迷你套房","陽台房"],fac:[{id:"f7_1",zh:"尊享豪華全景套房區",en:"Grand Suites & Panorama Suites",cat:"cabin",loc:"全層 (特別是船頭與船尾)",free:false,icon:"👑",desc:"配備超大私人景觀陽台、獨立起居客廳、大理石雙人按摩浴缸、專屬私人管家服務與全日送餐特權的高級套房群。",tips:"套房貴賓享有優先登離船、專屬俱樂部餐廳用餐等尊榮禮遇。"},{id:"f7_2",zh:"高級陽台房與內艙房",en:"Premium Balcony & Inside Staterooms",cat:"cabin",loc:"全層",free:false,icon:"🛏️",desc:"環境安靜、遠離公共娛樂區喧鬧的中高樓層舒適住宿客房。",tips:"搭乘中央觀光電梯即可迅速抵達 3 樓大廳或 9 樓泳池。"}]},{id:6,num:"6",zh:"半人馬座",it:"Centaurus",icon:"🏹",gold:false,desc:"全層純客艙住宿層，房型豐富多樣",nature:"客房住宿層（直通 5 樓娛樂區極快）",tags:["陽台房","海景房","內艙房","家庭連通房"],fac:[{id:"f6_1",zh:"綜合客房住宿區",en:"Staterooms & Suites Accommodation",cat:"cabin",loc:"全層",free:false,icon:"🛏️",desc:"包含經典陽台房、海景外艙房、標準內艙房與家庭多人間連通房型。",tips:"下樓即為 5 樓主要娛樂免稅街，非常適合喜愛夜生活與看秀的旅客。"}]},{id:5,num:"5",zh:"雙子座",it:"Gemini",icon:"♊",gold:true,desc:"全船主要娛樂、免稅購物、酒吧沙龍與夜生活中心（全通甲板）",nature:"黃金貫通層 · 娛樂購物與夜生活中心",tags:["黃金全通甲板","大劇院頂層","雅努斯賭場","阿波羅大酒吧","免稅精品街"],fac:[{id:"f5_1",zh:"宙斯大劇院 (第 3 層/頂層)",en:"Teatro Giove (Level 3)",cat:"entertainment",loc:"船頭",free:true,icon:"🎭",desc:"三層挑高大劇院最高觀眾席，居高臨下俯瞰整個舞台，每晚欣賞大型義大利歌舞秀、魔術奇幻秀與特技表演。",tips:"免費入場自由入座；建議提早 15 分鐘進場尋找視野最佳的中間席位。"},{id:"f5_2",zh:"阿波羅大酒吧",en:"Grand Bar Apollo",cat:"bar",loc:"船中",free:true,icon:"🎷",desc:"船上最核心的大型社交交誼廳，配備專業樂隊現場演奏舞台、大型拋光木質舞池與專屬吧檯，全天舉辦賓果、舞蹈教學與互動遊戲。",tips:"每晚最熱鬧的聚會場所；飲料單點或可使用船上飲料套餐。"},{id:"f5_3",zh:"雅努斯賭場 & 賭場酒吧",en:"Casino Giano & Giano Bar",cat:"entertainment",loc:"船中",free:false,icon:"🎰",desc:"華麗的古羅馬主題娛樂場，配備數十台吃角子老虎機、二十一點 (Blackjack)、輪盤、加勒比海撲克與百家樂賭桌。",tips:"僅於公海航行期間開放；嚴禁未成年人進入賭博區與拍照。"},{id:"f5_4",zh:"月神沙龍 / 露娜沙龍",en:"Salone Luna",cat:"entertainment",loc:"船尾",free:true,icon:"🌙",desc:"位於船尾的大型多功能娛樂沙龍，設有獨立舞台、舞池與酒吧，是舉辦主題之夜、化妝舞會與趣味競賽的熱門場地。",tips:"活動精彩熱烈，常舉辦威尼斯面具派對與白色主題之夜。"},{id:"f5_5",zh:"邱比特舞廳",en:"Sala da Ballo Cupido",cat:"bar",loc:"船尾",free:true,icon:"💘",desc:"以浪漫愛心與邱比特為主題裝飾的典雅舞廳，日間提供義大利語教學與手作課，晚間變身為浪漫慢舞與卡拉 OK 狂歡吧。",tips:"喜愛唱歌與交際舞朋友的秘密基地。"},{id:"f5_6",zh:"墨涅瓦鋼琴酒吧",en:"Piano Bar Minerva",cat:"bar",loc:"船中偏前",free:true,icon:"🎹",desc:"氣氛溫馨浪漫的音樂酒吧，專業鋼琴師現場自彈自唱古典爵士樂與當代流行金曲，品嚐調酒極致享受。",tips:"適合餐前小酌或餐後放鬆談心。"},{id:"f5_7",zh:"尤文塔斯甜品與巧克力吧",en:"Caffetteria Juventas",cat:"dining",loc:"船中",free:false,icon:"🍫",desc:"擁有吸睛的巨型巧克力噴泉，販售道地義式手工冰淇淋 (Gelato)、香濃巧克力鍋、現做可麗餅、精緻法式甜點與頂級 Lavazza 義式濃縮咖啡。",tips:"自費單點；推薦濃郁的開心果 (Pistachio) 與黑巧克力口味冰淇淋！"},{id:"f5_8",zh:"莎倫娜免稅精品街",en:"Galleria Shops / Duty-Free Boutiques",cat:"shopping",loc:"船中",free:true,icon:"🛍️",desc:"匯集國際知名品牌手錶（歐米茄、浪琴等）、珠寶首飾、化妝保養品、名牌包款、免稅煙酒以及歌詩達官方紀念服飾與郵輪模型。",tips:"公海航行期間免稅營業；航程中常舉辦限時折扣與珠寶特賣會。"},{id:"f5_9",zh:"4D 動感影院",en:"Cinema 4D",cat:"entertainment",loc:"船中",free:false,icon:"👓",desc:"配備 3D 立體眼鏡、動態液壓震動座椅、迎面風感、噴水水霧與香氛氣味的沉浸式 4D 科技短片影廳。",tips:"自費體驗（每場次約 15 分鐘）；刺激有趣，老少咸宜。"},{id:"f5_10",zh:"虛擬世界電玩中心",en:"Mondo Virtuale / Video Arcade",cat:"kids",loc:"船中",free:false,icon:"🕹️",desc:"配備最新街機賽車模擬器、體感打擊機、射擊遊戲與夾娃娃機，全天開放娛樂。",tips:"使用房卡直接感應扣款購幣。"},{id:"f5_11",zh:"克里歐圖書館與棋藝室",en:"Biblioteca Clio & Card Room",cat:"shopping",loc:"船中",free:true,icon:"📚",desc:"典雅安靜的文化空間，藏有各國語言書籍、小說與雜誌供自由借閱，並備有棋藝桌供橋牌、麻將與圍棋對弈。",tips:"請保持輕聲細語，享受寧靜午後時光。"},{id:"f5_12",zh:"維多利亞體育酒吧",en:"Bar Sport Victoria",cat:"bar",loc:"船中偏後",free:true,icon:"⚽",desc:"充滿英倫運動風情的特色酒吧，配備多面大螢幕電視即時轉播歐洲足球聯賽、NBA 等國際重要體育賽事。",tips:"供應多款生啤酒、瓶裝精釀與佐酒小吃。"},{id:"f5_13",zh:"赫拉克勒斯雪茄俱樂部",en:"Bar Classico Ercole / Cigar Lounge",cat:"bar",loc:"船中",free:false,icon:"🍂",desc:"船上專屬吸菸與品鑑雪茄的尊爵俱樂部，提供優質古巴雪茄、陳年干邑白蘭地與蘇格蘭單一麥芽威士忌。",tips:"設有獨立強力排風系統；嚴禁非指定區域吸菸。"},{id:"f5_14",zh:"藝術畫廊與拍賣中心",en:"Galleria d'Arte / Art Gallery",cat:"shopping",loc:"船中",free:true,icon:"🎨",desc:"長廊兩側陳列展示國際知名現代藝術家畫作、限量版畫與雕塑，航行期間會舉辦熱鬧的香檳藝術品拍賣會。",tips:"免費參觀；參加拍賣會常有免費香檳招待。"}]},{id:4,num:"4",zh:"獵戶座",it:"Orion",icon:"🏹",gold:false,desc:"主餐廳上層、宙斯劇院中層、潘神迪斯可舞廳、教堂與照片藝廊",nature:"劇院中層、夜店舞廳與主餐廳上層",tags:["劇院中層","迪斯可舞廳","照片藝廊","禮拜堂"],fac:[{id:"f4_1",zh:"宙斯大劇院 (第 2 層/中層)",en:"Teatro Giove (Level 2)",cat:"entertainment",loc:"船頭",free:true,icon:"🎭",desc:"劇院中層看台座席，視野開闊平視舞台，是觀賞歌舞特技秀與大型演講的極佳位置。",tips:"免費自由入座；開演前 10 分鐘入場為佳。"},{id:"f4_2",zh:"瑟瑞斯主餐廳 (上層)",en:"Ristorante Ceres (Upper Level)",cat:"dining",loc:"船尾",free:true,icon:"🍽️",desc:"瑟瑞斯主餐廳的二樓挑高用餐區，環繞古典歐式浮雕與水晶吊燈，提供優雅的免費點餐服務。",tips:"依房卡指定桌號與梯次入場；請勿穿著拖鞋背心進入。"},{id:"f4_3",zh:"維斯塔主餐廳 (上層)",en:"Ristorante Vesta (Upper Level)",cat:"dining",loc:"船中偏後",free:true,icon:"🍷",desc:"維斯塔主餐廳二樓用餐區，環境華美高雅，供應多道式歐陸精緻佳餚。",tips:"免費提供；與 Ceres 餐廳菜單相同，為船上兩大主餐館之一。"},{id:"f4_4",zh:"潘神迪斯可舞廳",en:"Discoteca Pan / Pan Disco",cat:"entertainment",loc:"船尾",free:true,icon:"🪩",desc:"極具未來復古感的雙層挑高專業夜店，配備頂級音響燈光系統與專業駐場 DJ，深夜引爆動感熱舞狂歡派對。",tips:"免費入場（酒水付費）；未成年人有宵禁入場限制。"},{id:"f4_5",zh:"照片藝廊與影像沖印館",en:"Galleria Foto / Photo Shop",cat:"shopping",loc:"船中",free:true,icon:"📸",desc:"隨船專業攝影師在登船、船長之夜與停靠港拍攝的所有精彩紀念照片，均會陳列在此供乘客挑選購買與數位沖印。",tips:"可使用數位機台透過人臉辨識快速找到自己的專屬照片。"},{id:"f4_6",zh:"海上禮拜堂 / 教堂",en:"Cappella / Chapel",cat:"service",loc:"船中",free:true,icon:"⛪",desc:"莊嚴寧靜的小型海上教堂，提供天主教彌撒、靜心祈禱、默想空間以及預約海上婚禮祝福儀式。",tips:"全天開放；請保持肅靜與尊重。"},{id:"f4_7",zh:"網際網路中心",en:"Internet Point",cat:"service",loc:"船中",free:false,icon:"💻",desc:"設有多台桌上型電腦與高速終端，供未自備裝置的乘客查詢電子郵件與上網衝浪。",tips:"需付費購買船上衛星 Wi-Fi 網路方案登入使用。"}]},{id:3,num:"3",zh:"白羊座",it:"Aries",icon:"♈",gold:false,desc:"萬神殿迎賓大廳、24H旅客服務中心、主餐廳底層與劇院舞台",nature:"迎賓大廳、總服務台與主點餐餐廳",tags:["萬神殿大廳","總服務台","宙斯劇院底層","Ceres 主餐廳"],fac:[{id:"f3_1",zh:"萬神殿大廳 & 觀光電梯",en:"Atrio Pantheon & Panoramic Lifts",cat:"bar",loc:"船中",free:true,icon:"🏛️",desc:"全船最壯觀的氣派中庭，挑高 10 層直通頂層天幕，配備 3 部穿梭上下的透明玻璃觀光電梯、萬神殿酒吧 (Pantheon Bar) 與現場弦樂重奏舞台。",tips:"登船第一眼震撼場景；拍照打卡必拍景點。"},{id:"f3_2",zh:"遊客服務中心 / 總服務台",en:"Guest Services / Reception Desk",cat:"service",loc:"船中 (大廳旁)",free:true,icon:"🛎️",desc:"全船核心行政樞紐，提供 24 小時全天候多語諮詢服務、帳單結算、房卡補發、各項設施指引與疑難排解。",tips:"24 小時服務；尖峰離船日建議提早使用自助機台或 App 綁定信用卡結帳。"},{id:"f3_3",zh:"岸上觀光旅遊諮詢櫃台",en:"Tour Office / Shore Excursions",cat:"service",loc:"船中 (大廳旁)",free:true,icon:"🗺️",desc:"專職提供各停靠港口官方精選岸上觀光行程解說、諮詢與報名服務，包含中文導遊巴士團與自由行接駁車預訂。",tips:"熱門港口岸上行程名額有限，建議登船首日即刻前來預訂。"},{id:"f3_4",zh:"宙斯大劇院 (第 1 層/舞台層)",en:"Teatro Giove (Main Floor)",cat:"entertainment",loc:"船頭",free:true,icon:"🎭",desc:"大劇院正前方搖滾區座席，近距離感受百老匯國際級歌手、專業舞者與特技大師的震撼演出，也是全船安全演習的核心集合點之一。",tips:"免費觀賞；請勿在演出過程中開啟閃光燈攝影。"},{id:"f3_5",zh:"瑟瑞斯主餐廳 (下層/主層)",en:"Ristorante Ceres (Main Floor)",cat:"dining",loc:"船尾",free:true,icon:"🍽️",desc:"以羅馬農業女神命名的旗艦主餐廳，供應免費點餐式精緻晚宴，包含義式前菜、手工濃湯、主菜牛排/海鮮與主廚特製甜點。",tips:"依房卡排定時間用餐；請遵守船長晚宴著裝建議。"},{id:"f3_6",zh:"維斯塔主餐廳 (下層/主層)",en:"Ristorante Vesta (Main Floor)",cat:"dining",loc:"船中偏後",free:true,icon:"🍷",desc:"以羅馬爐灶女神命名的優雅主餐廳，提供多道精緻歐陸料理點餐服務。",tips:"免費享用；餐點現點現做，由專業管家團隊提供尊榮侍餐服務。"},{id:"f3_7",zh:"海上壽司小酒館 (Sushino at Costa)",en:"Sushino at Costa (Boutique Japanese)",cat:"dining",loc:"船中",free:false,icon:"🍣",desc:"主打正統日式手作料理，供應高品質新鮮刺身、炙燒鮭魚握壽司、加州卷組合、毛豆與日式清酒（部分航次進駐）。",tips:"自費單點或套餐；支援內用與外帶回房享用。"},{id:"f3_8",zh:"下層戶外步道甲板",en:"Lower Promenade Deck",cat:"service",loc:"兩側戶外",free:true,icon:"🌊",desc:"緊鄰海面的戶外散步走道，懸掛全船救生艇，是感受海浪拍打與觀賞波浪起伏的絕佳散步處。",tips:"登船安全逃生演習集合站 (Muster Station) 多位於此層戶外兩側。"}]},{id:2,num:"2",zh:"仙后座",it:"Cassiopea",icon:"👑",gold:false,desc:"全層客艙住宿層（標準內艙房與經典海景外艙房）",nature:"平穩靜音客房住宿層",tags:["純客艙區","海景房","內艙房","靜音平穩"],fac:[{id:"f2_1",zh:"經典海景外艙房 (Oceanview)",en:"Classic Oceanview Staterooms",cat:"cabin",loc:"全層外側",free:false,icon:"🪟",desc:"配備密封觀景圓窗或方窗，可飽覽美麗海上風光，採光充沛，性價比極高。",tips:"位於低樓層，在航行遇到大風浪時晃動感最小、最為平穩舒適。"},{id:"f2_2",zh:"標準舒適內艙房 (Inside)",en:"Standard Inside Staterooms",cat:"cabin",loc:"全層內側",free:false,icon:"🛏️",desc:"經濟實惠的舒適住宿選擇，配備雙人床/兩張單人床、獨立衛浴、液晶電視與保險箱，適合追求實惠小資旅客。",tips:"房內全黑無光，睡眠品質絕佳。"}]},{id:1,num:"1",zh:"仙女座",it:"Andromeda",icon:"🧚",gold:false,desc:"客艙住宿、隨船醫療中心與主要登離船通道",nature:"客房住宿、24H醫療中心與登離船閘口",tags:["客艙住宿","醫療中心","登離船舷梯"],fac:[{id:"f1_1",zh:"隨船醫療中心 (24小時值班)",en:"Medical Center / Centro Medico",cat:"service",loc:"船中偏後",free:false,icon:"🏥",desc:"由合規隨船急診專科醫師與護理師駐診，具備基本檢驗、常見急症診治、外傷處理、點滴與急救醫療設備。",tips:"醫療為自費項目（建議備妥海外旅遊醫療平安險與收據以利後續理賠）；暈船可至服務台索取暈船藥。"},{id:"f1_2",zh:"主要登離船舷梯出入口",en:"Gangway & Tender Boarding Stations",cat:"service",loc:"船中 / 兩側",free:true,icon:"🚪",desc:"郵輪靠泊碼頭或停泊外海接駁小艇時的主要出入境安檢與上下船管制閘口。",tips:"上下船請務必隨身攜帶個人房卡 (Costa Card) 感應過卡。"},{id:"f1_3",zh:"底層經濟客房區",en:"Lower Staterooms",cat:"cabin",loc:"全層",free:false,icon:"🛏️",desc:"位於最底層的內艙與海景客房，吃水深、重心低，受風浪影響最小。",tips:"特別適合容易暈船或長輩長住。"}]}];
+
+// ═══ State ═══
+let mode = "overview", deckId = 9, filter = "all", stars = JSON.parse(localStorage.getItem("cs_stars")||"[]");
+
+// ═══ Init ═══
+document.addEventListener("DOMContentLoaded", () => { render(); updateBadge();
+  window.addEventListener("scroll", () => { document.getElementById("btnTop").classList.toggle("show", scrollY > 250); });
+  // swipe support
+  let sx=0, sy=0;
+  document.addEventListener("touchstart", e => { sx=e.touches[0].clientX; sy=e.touches[0].clientY; }, {passive:true});
+  document.addEventListener("touchend", e => {
+    if(mode!=="single") return;
+    const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>80 && Math.abs(dx)>Math.abs(dy)*1.5){
+      const idx=D.findIndex(d=>d.id===deckId);
+      if(dx<0 && idx>0){ deckId=D[idx-1].id; render(); }
+      else if(dx>0 && idx<D.length-1){ deckId=D[idx+1].id; render(); }
+    }
+  }, {passive:true});
+});
+
+// ═══ Navigation ═══
+function go(m, id) {
+  if(id!==undefined) deckId=id;
+  mode=m; closeMore(); render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function jumpDeck(id){ go("single",id); }
+
+// ═══ Tabs ═══
+function updateTabs(){
+  ["tabOv","tabSg","tabSt"].forEach(t=>document.getElementById(t).classList.remove("on"));
+  document.getElementById(mode==="overview"?"tabOv":mode==="single"?"tabSg":"tabSt").classList.add("on");
+  // desktop
+  ["dBtnOv","dBtnSg","dBtnSt"].forEach(t=>{const e=document.getElementById(t);if(e)e.style.opacity=0.5;});
+  const a=document.getElementById(mode==="overview"?"dBtnOv":mode==="single"?"dBtnSg":"dBtnSt");
+  if(a)a.style.opacity=1;
+}
+
+// ═══ Render main ═══
+function render(){
+  updateTabs();
+  const db=document.getElementById("deckBar");
+  db.classList.toggle("visible", mode==="single");
+  if(mode==="single") renderDeckBar();
+  const mc=document.getElementById("mainContent");
+  if(mode==="overview") mc.innerHTML=renderOverview();
+  else if(mode==="single") mc.innerHTML=renderSingle();
+  else mc.innerHTML=renderStarred();
+}
+
+// ═══ Deck Bar ═══
+function renderDeckBar(){
+  const c=document.getElementById("deckBarScroll");
+  c.innerHTML=D.map(d=>`<button class="dk-chip ${d.id===deckId?'on':''} ${d.gold?'golden':''}" onclick="jumpDeck(${d.id})">${d.icon} ${d.num}F</button>`).join('');
+  setTimeout(()=>{const a=c.querySelector('.dk-chip.on');if(a)a.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});},50);
+}
+
+// ═══ Overview ═══
+function renderOverview(){
+  const qf=`<div class="sec-banner"><h2><span class="sec-badge">13 Decks</span> 全樓層速覽</h2><p>由高至低剖面概覽，點擊展開或直達詳細</p></div>
+  <div class="qf-grid">
+    <div class="qf-card" onclick="jumpDeck(9)"><div class="qf-card-icon">🏊</div><div class="qf-card-label">游泳 / 按摩池</div><div class="qf-card-decks">9·11·12·14F</div><div class="qf-card-hint">雙穹頂泳池、滑水道</div></div>
+    <div class="qf-card" onclick="jumpDeck(3)"><div class="qf-card-icon">🍽️</div><div class="qf-card-label">免費大餐</div><div class="qf-card-decks">3·4·9·10F</div><div class="qf-card-hint">主餐廳、自助百匯</div></div>
+    <div class="qf-card" onclick="jumpDeck(9)"><div class="qf-card-icon">🍲</div><div class="qf-card-label">火鍋 / 披薩</div><div class="qf-card-decks">9·3·5F</div><div class="qf-card-hint">海上撈、Sushino</div></div>
+    <div class="qf-card" onclick="jumpDeck(5)"><div class="qf-card-icon">🎭</div><div class="qf-card-label">秀場 / 夜生活</div><div class="qf-card-decks">3·4·5F</div><div class="qf-card-hint">劇院、賭場、酒吧</div></div>
+    <div class="qf-card" onclick="jumpDeck(11)"><div class="qf-card-icon">💆</div><div class="qf-card-label">Spa / 健身</div><div class="qf-card-decks">11·12F</div><div class="qf-card-hint">海景健身房、桑拿</div></div>
+    <div class="qf-card" onclick="jumpDeck(10)"><div class="qf-card-icon">👶</div><div class="qf-card-label">親子 / 托兒</div><div class="qf-card-decks">10·12·5F</div><div class="qf-card-hint">兒童俱樂部、電玩</div></div>
+    <div class="qf-card" onclick="jumpDeck(3)"><div class="qf-card-icon">🛎️</div><div class="qf-card-label">服務 / 醫療</div><div class="qf-card-decks">3·1F</div><div class="qf-card-hint">總服務台、醫療中心</div></div>
+    <div class="qf-card" onclick="jumpDeck(5)"><div class="qf-card-icon">🛍️</div><div class="qf-card-label">免稅購物</div><div class="qf-card-decks">5F</div><div class="qf-card-hint">精品街、巧克力吧</div></div>
+  </div>`;
+  const rows=D.map(d=>{
+    const pills=d.fac.slice(0,5).map(f=>{
+      let c=f.free?'t-free':'t-paid'; if(f.cat==='pool')c='t-pool'; if(f.cat==='entertainment'||f.cat==='bar')c='t-ent';
+      return `<span class="ov-pill ${c}">${f.icon} ${f.zh}</span>`;
+    }).join('');
+    const innerCards=d.fac.map(f=>renderFacItem(f,d)).join('');
+    return `<div class="ov-deck ${d.gold?'golden':''}" id="ovDeck${d.id}">
+      <div class="ov-deck-head" onclick="toggleOvDeck(${d.id})">
+        <div class="ov-num">${d.num}F</div>
+        <div class="ov-deck-info"><div class="ov-deck-title">${d.icon} ${d.zh} <span style="font-size:0.72rem;color:var(--text-dim);font-family:var(--font-serif)">${d.it}</span></div><div class="ov-deck-sub">${d.nature}</div></div>
+        <div class="ov-chevron">▼</div>
+      </div>
+      <div class="ov-pills">${pills}</div>
+      <div class="ov-expand"><div class="ov-expand-inner"><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">${d.tags.map(t=>`<span class="sec-tag">${t}</span>`).join('')}</div><div class="fac-list">${innerCards}</div><div style="padding:4px 0"><button style="width:100%;padding:10px;border-radius:8px;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.3);color:var(--gold-light);font-size:0.82rem;cursor:pointer;touch-action:manipulation" onclick="event.stopPropagation();jumpDeck(${d.id})">前往 Deck ${d.num} 詳細頁面 →</button></div></div></div>
+    </div>`;
+  }).join('');
+  return `<div class="overview-section">${qf}<div style="display:flex;flex-direction:column;gap:8px">${rows}</div></div>`;
+}
+function toggleOvDeck(id){
+  document.getElementById('ovDeck'+id).classList.toggle('ov-expanded');
+}
+
+// ═══ Single Deck ═══
+function renderSingle(){
+  const d=D.find(x=>x.id===deckId); if(!d) return '';
+  const banner=`<div class="sec-banner"><h2><span class="sec-badge">Deck ${d.num}</span> ${d.zh} (${d.it})</h2><p>${d.desc}</p><div class="sec-tags">${d.tags.map(t=>`<span class="sec-tag">${t}</span>`).join('')}</div></div>`;
+  const cards=d.fac.map(f=>renderFacItem(f,d)).join('');
+  return `${banner}<div class="fac-list">${cards}</div>`;
+}
+
+// ═══ Starred ═══
+function renderStarred(){
+  const banner=`<div class="sec-banner"><h2>⭐ 我的收藏</h2><p>已收藏 ${stars.length} 個設施</p></div>`;
+  let items=[];
+  D.forEach(d=>d.fac.forEach(f=>{if(stars.includes(f.id))items.push({f,d});}));
+  if(!items.length) return `${banner}<div class="empty-box"><div class="empty-box-icon">⭐</div><div>尚未收藏任何設施</div><div style="font-size:0.78rem;margin-top:4px">瀏覽設施時點擊「加入收藏」即可儲存</div></div>`;
+  return `${banner}<div class="fac-list">${items.map(x=>renderFacItem(x.f,x.d)).join('')}</div>`;
+}
+
+// ═══ Facility accordion item ═══
+function renderFacItem(f,d){
+  const isOn=stars.includes(f.id);
+  return `<div class="fac-item" id="fac_${f.id}">
+    <div class="fac-head" onclick="toggleFac('${f.id}')">
+      <div class="fac-icon">${f.icon}</div>
+      <div class="fac-head-info"><div class="fac-name">${f.zh}</div><div class="fac-name-en">${f.en}</div></div>
+      <div class="fac-head-tags"><span class="fac-price-tag ${f.free?'free':'paid'}">${f.free?'免費':'付費'}</span></div>
+      <div class="fac-chevron">▼</div>
+    </div>
+    <div class="fac-body"><div class="fac-body-inner">
+      <div class="fac-meta">
+        <span class="fac-meta-pill deck">📍 ${d.num}F ${d.zh}</span>
+        <span class="fac-meta-pill loc">${f.loc}</span>
+      </div>
+      <div class="fac-desc">${f.desc}</div>
+      ${f.tips?`<div class="fac-tips"><strong>💡 提醒：</strong>${f.tips}</div>`:''}
+      <div class="fac-star-row"><button class="btn-star ${isOn?'on':''}" onclick="event.stopPropagation();toggleStar('${f.id}')">${isOn?'★ 已收藏':'☆ 加入收藏'}</button></div>
+    </div></div>
+  </div>`;
+}
+function toggleFac(id){
+  document.getElementById('fac_'+id).classList.toggle('expanded');
+}
+
+// ═══ Stars ═══
+function toggleStar(id){
+  const i=stars.indexOf(id);
+  if(i>-1)stars.splice(i,1);else stars.push(id);
+  localStorage.setItem("cs_stars",JSON.stringify(stars));
+  updateBadge(); render();
+}
+function updateBadge(){
+  const b=document.getElementById("starBadge");
+  if(b){b.textContent=stars.length;b.style.display=stars.length?'block':'none';}
+}
+
+// ═══ Search ═══
+function openSearch(){
+  document.getElementById("searchOverlay").classList.add("open");
+  setTimeout(()=>document.getElementById("searchInput").focus(),300);
+}
+function closeSearch(){
+  document.getElementById("searchOverlay").classList.remove("open");
+  document.getElementById("searchInput").value='';
+  filter='all'; updateSearchChips();
+}
+function setFilter(c){
+  filter=c; updateSearchChips(); doSearch();
+}
+function updateSearchChips(){
+  document.querySelectorAll('.s-chip').forEach(e=>e.classList.toggle('on',e.dataset.cat===filter));
+}
+function doSearch(){
+  const q=document.getElementById("searchInput").value.trim().toLowerCase();
+  const box=document.getElementById("searchResults");
+  if(!q&&filter==='all'){box.innerHTML='<div class="search-empty"><div class="search-empty-icon">🔍</div>輸入關鍵字搜尋全船設施</div>';return;}
+  let results=[];
+  D.forEach(d=>d.fac.forEach(f=>{
+    if(filter!=='all'&&f.cat!==filter) return;
+    if(q&&!(f.zh.toLowerCase().includes(q)||f.en.toLowerCase().includes(q)||f.desc.toLowerCase().includes(q)||(f.tips||'').toLowerCase().includes(q)||d.zh.toLowerCase().includes(q)||d.it.toLowerCase().includes(q))) return;
+    results.push({f,d});
+  }));
+  if(!results.length){box.innerHTML='<div class="search-empty"><div class="search-empty-icon">🔎</div>找不到符合的設施<br><span style="font-size:0.78rem">嘗試更換關鍵字或篩選類別</span></div>';return;}
+  box.innerHTML=results.map(({f,d})=>renderFacItem(f,d)).join('');
+}
+
+// ═══ Specs toggle ═══
+function toggleSpecs(){ document.getElementById("specsBar").classList.toggle("open"); }
+
+// ═══ More menu ═══
+function toggleMore(){ document.getElementById("moreMenu").classList.toggle("open"); document.getElementById("tabMore").classList.toggle("on"); }
+function closeMore(){ document.getElementById("moreMenu").classList.remove("open"); document.getElementById("tabMore").classList.remove("on"); }
+document.addEventListener("click",e=>{
+  const m=document.getElementById("moreMenu"),t=document.getElementById("tabMore");
+  if(m.classList.contains("open")&&!m.contains(e.target)&&!t.contains(e.target)) closeMore();
+});
+
+// ═══ Modal ═══
+function openModal(id){
+  document.getElementById(id+'Bg').classList.add('open');
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id){
+  document.getElementById(id+'Bg').classList.remove('open');
+  document.getElementById(id).classList.remove('open');
+}
+</script>
+</body>
+</html>
